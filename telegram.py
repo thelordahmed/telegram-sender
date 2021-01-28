@@ -1,7 +1,7 @@
 import os
 import random
 from time import sleep
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -24,7 +24,7 @@ class Telegram:
     # x_button = '//div[@class="im_dialogs_panel"]/div[@class="im_dialogs_search"]/a'
     # first_result = '//div[@class="im_dialogs_col" and @my-dialogs-list]//ul/li[1]'
     # CLICK DORPDOWN FIRST
-    dropdown_btn = '//div[@dropdown and @style]/a[@dropdown-toggle]'
+    dropdown_btn = '//div[@class="icon-hamburger-wrap"]'
     # THEN CLICK CONTACTS
     contacts_btn = '//a[@ng-click="openContacts()"]'
     # THEN CLICK ADD NEW CONTACT
@@ -67,6 +67,7 @@ class Telegram:
 
     @classmethod
     def close(cls):
+        cls._handle = None
         cls._window.close()
 
     @classmethod
@@ -81,8 +82,15 @@ class Telegram:
             cls._window.refresh()
             cls.search_phone(number)
         # ADDING NEW CONTACT
-        cls._window.find_element_by_xpath(cls.contacts_btn).click()
+        try:
+            sleep(1)
+            cls._window.find_element_by_xpath(cls.contacts_btn).click()
+        except ElementNotInteractableException:
+            sleep(1)
+            cls._window.find_element_by_xpath(cls.contacts_btn).click()
+        sleep(1)
         cls._window.find_element_by_xpath(cls.add_new_contact).click()
+        sleep(1)
         cls._window.find_element_by_xpath(cls.phone_input).send_keys(number)
         cls._window.find_element_by_xpath(cls.saveContact_btn).click()
         # WAITING FOR ADDING MODAL TO DISAPPEAR
@@ -110,14 +118,15 @@ class Telegram:
         # CHECK ON NOT FOUND ERROR MESSAGE
         try:
             cls._window.find_element_by_xpath(cls.error_modal)
-        except NoSuchElementException:
             return False
+        except NoSuchElementException:
+            pass
         # CHECK IF IT'S CHANNEL
         try:
             cls._window.find_element_by_xpath(cls.channel_div)
-        except NoSuchElementException:
             return "channel"
-
+        except NoSuchElementException:
+            pass
 
     @classmethod
     def sending_text(cls, message: str) -> None:

@@ -1,11 +1,9 @@
 import csv
 import shutil
 from datetime import datetime, timedelta
-
 from PySide2 import QtCore
 from openpyxl import load_workbook
 from selenium.common.exceptions import TimeoutException
-
 import controller
 from PySide2.QtWidgets import QApplication
 from view import View
@@ -19,7 +17,7 @@ from state_methods import State
 from ast import literal_eval
 
 
-# todo - (feature update) load the contacts to the interface in another thread
+# todo - (Future update) load the contacts to the interface in another thread
 
 class Signals(QtCore.QObject):
     ok_message = QtCore.Signal(str, str)
@@ -224,7 +222,6 @@ class Main:
             else:
                 re = False
             if re:
-                self.session.query(Account).delete()
                 self.session.query(ContactsAnony).delete()
                 self.session.commit()
                 self.view.tableWidget.setRowCount(0)
@@ -266,13 +263,20 @@ class Main:
                     return "not found"
                 elif res == "channel":
                     return "channel"
+            # PREPARING THE MULTIPLE MESSAGES
+            if "{new message}" in message:
+                multi_messages = message.split("{new message}")
+            else:
+                multi_messages = [message]
             # SENDING TEXT & ATTACHMENTS
             if textFirst_rb.isChecked():
-                telegram_class.sending_text(message)
+                for msg in multi_messages:
+                    telegram_class.sending_text(msg)
                 telegram_class.sending_attachment(paths)
             else:
                 telegram_class.sending_attachment(paths)
-                telegram_class.sending_text(message)
+                for msg in multi_messages:
+                    telegram_class.sending_text(msg)
         else:
             try:
                 Telegram.wait_for_connection()
@@ -296,10 +300,10 @@ class Main:
         self.view.save_settings(session)
         messages = self.view.messages_sb.value()
         accounts = session.query(Account).all()
+        # TO CHECK REASON OF BREAKING CONTACTS LOOP
+        loop_check = None  # "Completed" | "Error" | "Account Limit"
         for acc in accounts:
-            # TO CHECK REASON OF BREAKING CONTACTS LOOP
-            loop_check = "Completed"  # "Completed" | "Error" | "Account Limit"
-            if acc.sentCounter == messages:
+            if acc.sentCounter >= messages:
                 if (datetime.utcnow() - acc.sentDate) > timedelta(hours=24):
                     # RESET SENT COUNTER OF THE ACCOUNT
                     acc.sentCounter = 0
@@ -307,6 +311,8 @@ class Main:
                 else:
                     # SKIP TO NEXT ACCOUNT
                     continue
+            # to check if the software stopped before sending because of accounts reaching the limit or just finished the sending
+            loop_check = "Completed"
             # OPEN THE ACCOUNT BROWSER WINDOW
             Telegram.open(acc.name)
             # GET CONTACTS WITH STATUS "--"
@@ -349,18 +355,29 @@ class Main:
             if loop_check == "Account Limit":
                 Telegram.close()
                 sleep(2)
+            # BREAK ACCOUNTS LOOP IF CONNECTION ERROR FOR MORE THAT 1 HOUR
             elif loop_check == "Error":
                 self.signals.ok_message.emit("Error", "Connection was lost for more 1 hour\nPlease check your network then try again")
                 break
+            # BREAK ACCOUNTS LOOP IF COMPLETED
             elif loop_check == "Completed":
                 self.signals.ok_message.emit("Completed", "Session Completed Successfully ^_^")
                 break
+            # BREAK ACCOUNTS LOOP IF ALL ACCOUNTS ALREADY REACHED LIMIT
+            else:
+                break
+        # SHOW THIS MESSAGE ONLY WHEN ALL ACCOUNTS REACH LIMIT
+        if loop_check is None:
+            self.signals.ok_message.emit("Limit Reached",
+                                         "All listed accountes have reached the sending limit for today\nplease add more accounts or try sending again tomorrow")
+            # todo - (Future update) option for the user to make software sleep for 24 hours when all account reach limit
 
 
     def process_familiar(self):
         session = Session()
         self.view.save_settings(session)
         # loop on messages
+        # TODO
 
 
 if __name__ == '__main__':
