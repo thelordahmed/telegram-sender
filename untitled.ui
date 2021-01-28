@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>536</width>
-    <height>1027</height>
+    <width>634</width>
+    <height>966</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,6 +28,9 @@
         <string>Anonymous</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_9">
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QTabWidget" name="tabWidget">
           <property name="styleSheet">
@@ -39,7 +42,7 @@
 </string>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="iconSize">
            <size>
@@ -60,7 +63,7 @@
              <widget class="QListWidget" name="accounts_listwidget"/>
             </item>
             <item>
-             <widget class="QFrame" name="">
+             <widget class="QFrame" name="frame">
               <layout class="QHBoxLayout" name="horizontalLayout_11">
                <item>
                 <widget class="QPushButton" name="addAccount_btn">
@@ -171,91 +174,122 @@ background:transparent;
              </widget>
             </item>
             <item>
-             <widget class="QGroupBox" name="groupBox">
+             <widget class="QGroupBox" name="groupBox_9">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
               <property name="font">
                <font>
-                <family>arial</family>
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
-              <property name="styleSheet">
-               <string notr="true">QGroupBox{
-background:transparent;
-}</string>
-              </property>
               <property name="title">
-               <string>Choose the contacts source</string>
+               <string>Settings</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
-              <property name="flat">
-               <bool>false</bool>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
+              <layout class="QVBoxLayout" name="verticalLayout_17">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
                <property name="topMargin">
-                <number>20</number>
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
                </property>
                <property name="bottomMargin">
-                <number>20</number>
+                <number>0</number>
                </property>
                <item>
-                <layout class="QGridLayout" name="gridLayout">
-                 <property name="spacing">
-                  <number>5</number>
+                <layout class="QHBoxLayout" name="horizontalLayout_16">
+                 <property name="topMargin">
+                  <number>0</number>
                  </property>
-                 <item row="0" column="0">
-                  <layout class="QHBoxLayout" name="horizontalLayout_4">
-                   <item>
-                    <widget class="QLineEdit" name="sheet_le">
-                     <property name="readOnly">
-                      <bool>true</bool>
-                     </property>
-                     <property name="placeholderText">
-                      <string>xlsx or CSV (comma seperated)</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QToolButton" name="sheet_btn">
-                     <property name="text">
-                      <string>...</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
+                 <property name="bottomMargin">
+                  <number>10</number>
+                 </property>
+                 <item>
+                  <widget class="QGroupBox" name="groupBox">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="title">
+                    <string>Sending Order</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_3">
+                    <item>
+                     <widget class="QRadioButton" name="textFirst_rb">
+                      <property name="text">
+                       <string>Text First</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="attachFirst_rb">
+                      <property name="text">
+                       <string>Attachment First</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBox_10">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="title">
+                    <string>Messages per account</string>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout">
+                    <item>
+                     <widget class="QSpinBox" name="messages_sb">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
+                      <property name="value">
+                       <number>30</number>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
                  </item>
                 </layout>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_5">
-                 <property name="font">
-                  <font>
-                   <family>arial</family>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">color:red</string>
-                 </property>
-                 <property name="text">
-                  <string>* phone numbers must be in column B</string>
-                 </property>
-                </widget>
                </item>
               </layout>
              </widget>
@@ -323,40 +357,13 @@ background:transparent;
                  </item>
                 </layout>
                </item>
-               <item row="2" column="0" colspan="2">
-                <layout class="QHBoxLayout" name="horizontalLayout_12">
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QRadioButton" name="textFirst_rb">
-                   <property name="text">
-                    <string>Send text before attachments</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QRadioButton" name="textCaption_rb">
-                   <property name="text">
-                    <string>Send text as caption</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
               </layout>
              </widget>
             </item>
             <item>
              <widget class="QGroupBox" name="groupBox_5">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -387,34 +394,48 @@ background:transparent;
                 <number>5</number>
                </property>
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_7">
-                 <property name="spacing">
-                  <number>5</number>
+                <widget class="QFrame" name="">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
                  </property>
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QPushButton" name="pushButton">
-                   <property name="text">
-                    <string>Append {name}</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="append_newmessage">
-                   <property name="text">
-                    <string>new message</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                  <property name="spacing">
+                   <number>5</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>1</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>1</number>
+                  </property>
+                  <item>
+                   <widget class="QPushButton" name="pushButton">
+                    <property name="text">
+                     <string>Append {name}</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="append_newmessage">
+                    <property name="text">
+                     <string>new message</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
                </item>
                <item>
                 <widget class="QPlainTextEdit" name="message_text">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>16777215</width>
@@ -439,29 +460,20 @@ background:transparent;
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <widget class="QTableWidget" name="tableWidget">
-              <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
+              <property name="minimumSize">
+               <size>
+                <width>493</width>
+                <height>0</height>
+               </size>
               </property>
-              <property name="selectionMode">
-               <enum>QAbstractItemView::NoSelection</enum>
+              <property name="maximumSize">
+               <size>
+                <width>493</width>
+                <height>16777215</height>
+               </size>
               </property>
-              <property name="selectionBehavior">
-               <enum>QAbstractItemView::SelectItems</enum>
-              </property>
-              <attribute name="horizontalHeaderCascadingSectionResizes">
-               <bool>false</bool>
-              </attribute>
-              <attribute name="horizontalHeaderMinimumSectionSize">
-               <number>39</number>
-              </attribute>
-              <attribute name="horizontalHeaderDefaultSectionSize">
-               <number>125</number>
-              </attribute>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
-              </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
               </attribute>
               <column>
                <property name="text">
@@ -474,11 +486,20 @@ background:transparent;
               </column>
               <column>
                <property name="text">
-                <string>Phone</string>
+                <string>Sender</string>
                </property>
                <property name="icon">
                 <iconset resource="../Whatsapp-bulk-sender/images.qrc">
-                 <normaloff>:/black-icons/Data/imgs/black icons/icons8-phone-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-phone-500.png</iconset>
+                 <normaloff>:/black-icons/Data/imgs/black icons/icons8-circled-right-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-circled-right-500.png</iconset>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Phone or ID  </string>
+               </property>
+               <property name="icon">
+                <iconset resource="../Whatsapp-bulk-sender/images.qrc">
+                 <normaloff>:/black-icons/Data/imgs/black icons/icons8-call-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-call-500.png</iconset>
                </property>
               </column>
               <column>
@@ -490,6 +511,46 @@ background:transparent;
                  <normaloff>:/black-icons/Data/imgs/black icons/icons8-info-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-info-500.png</iconset>
                </property>
               </column>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="sheet_btn">
+              <property name="styleSheet">
+               <string notr="true">padding:15px 0</string>
+              </property>
+              <property name="text">
+               <string>Import Contacts</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../Whatsapp-bulk-sender/images.qrc">
+                <normaloff>:/black-icons/Data/imgs/black icons/icons8-hospital-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-hospital-500.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QPushButton" name="newSession_btn">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">padding:10px 20px</string>
+              </property>
+              <property name="text">
+               <string>Start New Session</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../Whatsapp-bulk-sender/images.qrc">
+                <normaloff>:/black-icons/Data/imgs/black icons/icons8-trash-can-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-trash-can-500.png</iconset>
+              </property>
              </widget>
             </item>
            </layout>
@@ -575,6 +636,67 @@ p, li { white-space: pre-wrap; }
           </widget>
          </widget>
         </item>
+        <item alignment="Qt::AlignHCenter">
+         <widget class="QFrame" name="horizontalFrame">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="start_btn">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>45</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../Whatsapp-bulk-sender/images.qrc">
+               <normaloff>:/black-icons/Data/imgs/black icons/icons8-play-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-play-500.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>34</width>
+               <height>48</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="stop_btn">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>45</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../Whatsapp-bulk-sender/images.qrc">
+               <normaloff>:/black-icons/Data/imgs/black icons/icons8-stop-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-stop-500.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>38</width>
+               <height>37</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="familiar">
@@ -582,6 +704,9 @@ p, li { white-space: pre-wrap; }
         <string>Familiar</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_15">
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QTabWidget" name="tabWidget_2">
           <property name="styleSheet">
@@ -610,6 +735,15 @@ p, li { white-space: pre-wrap; }
             <string>Main</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_11" stretch="0,0,0,1">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>12</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QGroupBox" name="groupBox_6">
               <property name="sizePolicy">
@@ -686,92 +820,49 @@ background:transparent;
             </item>
             <item>
              <widget class="QGroupBox" name="groupBox_2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
               <property name="font">
                <font>
-                <family>arial</family>
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
-              <property name="styleSheet">
-               <string notr="true">QGroupBox{
-background:transparent;
-}</string>
-              </property>
               <property name="title">
-               <string>Choose the contacts source</string>
+               <string>Settings</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
-              <property name="flat">
-               <bool>false</bool>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_4">
-               <property name="topMargin">
-                <number>20</number>
-               </property>
-               <property name="bottomMargin">
-                <number>20</number>
-               </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
-                <layout class="QGridLayout" name="gridLayout_2">
-                 <property name="spacing">
-                  <number>5</number>
+                <widget class="QGroupBox" name="groupBox_11">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
                  </property>
-                 <item row="0" column="0">
-                  <layout class="QHBoxLayout" name="horizontalLayout_6">
-                   <item>
-                    <widget class="QLineEdit" name="sheet_le_2">
-                     <property name="readOnly">
-                      <bool>true</bool>
-                     </property>
-                     <property name="placeholderText">
-                      <string>xlsx or CSV (comma seperated)</string>
-                     </property>
-                     <property name="ahmed" stdset="0">
-                      <string>asd</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QToolButton" name="sheet_btn_2">
-                     <property name="text">
-                      <string>...</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_6">
-                 <property name="font">
-                  <font>
-                   <family>arial</family>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
+                 <property name="title">
+                  <string>Sending Order</string>
                  </property>
-                 <property name="styleSheet">
-                  <string notr="true">color:red</string>
-                 </property>
-                 <property name="text">
-                  <string>* phone numbers must be in column B</string>
-                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <item>
+                   <widget class="QRadioButton" name="textFirst_rb_2">
+                    <property name="text">
+                     <string>Text First</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="attachFirst_rb_2">
+                    <property name="text">
+                     <string>Attachment First</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </item>
               </layout>
@@ -835,33 +926,6 @@ background:transparent;
                   <widget class="QToolButton" name="attachments_btn_2">
                    <property name="text">
                     <string>...</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="2" column="0" colspan="2">
-                <layout class="QHBoxLayout" name="horizontalLayout_14">
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QRadioButton" name="textFirst_rb_2">
-                   <property name="text">
-                    <string>Send text before attachments</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QRadioButton" name="textCaption_rb_2">
-                   <property name="text">
-                    <string>Send text as caption</string>
                    </property>
                   </widget>
                  </item>
@@ -991,7 +1055,7 @@ background:transparent;
               </column>
               <column>
                <property name="text">
-                <string>Phone</string>
+                <string>Phone or ID</string>
                </property>
                <property name="icon">
                 <iconset resource="../Whatsapp-bulk-sender/images.qrc">
@@ -1007,6 +1071,46 @@ background:transparent;
                  <normaloff>:/black-icons/Data/imgs/black icons/icons8-info-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-info-500.png</iconset>
                </property>
               </column>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="sheet_btn_2">
+              <property name="styleSheet">
+               <string notr="true">padding:15px 0</string>
+              </property>
+              <property name="text">
+               <string>Import Contacts</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../Whatsapp-bulk-sender/images.qrc">
+                <normaloff>:/black-icons/Data/imgs/black icons/icons8-hospital-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-hospital-500.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QPushButton" name="newSession_btn_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">padding:10px 20px</string>
+              </property>
+              <property name="text">
+               <string>Start New Session</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../Whatsapp-bulk-sender/images.qrc">
+                <normaloff>:/black-icons/Data/imgs/black icons/icons8-trash-can-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-trash-can-500.png</iconset>
+              </property>
              </widget>
             </item>
            </layout>
@@ -1092,69 +1196,72 @@ p, li { white-space: pre-wrap; }
           </widget>
          </widget>
         </item>
+        <item alignment="Qt::AlignHCenter">
+         <widget class="QFrame" name="horizontalFrame_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_15">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="start_btn_2">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>45</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../Whatsapp-bulk-sender/images.qrc">
+               <normaloff>:/black-icons/Data/imgs/black icons/icons8-play-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-play-500.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>34</width>
+               <height>48</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="stop_btn_2">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>45</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../Whatsapp-bulk-sender/images.qrc">
+               <normaloff>:/black-icons/Data/imgs/black icons/icons8-stop-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-stop-500.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>38</width>
+               <height>37</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
        </layout>
       </widget>
-     </widget>
-    </item>
-    <item alignment="Qt::AlignHCenter">
-     <widget class="QFrame" name="horizontalFrame">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_10">
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QPushButton" name="start_btn">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>45</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="../Whatsapp-bulk-sender/images.qrc">
-           <normaloff>:/black-icons/Data/imgs/black icons/icons8-play-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-play-500.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>34</width>
-           <height>48</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="stop_btn">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>45</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="../Whatsapp-bulk-sender/images.qrc">
-           <normaloff>:/black-icons/Data/imgs/black icons/icons8-stop-500.png</normaloff>:/black-icons/Data/imgs/black icons/icons8-stop-500.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>38</width>
-           <height>37</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </item>
     <item>
@@ -1244,7 +1351,7 @@ border:none;
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="">
+     <widget class="QFrame" name="frame">
       <layout class="QHBoxLayout" name="horizontalLayout_13">
        <property name="topMargin">
         <number>1</number>
