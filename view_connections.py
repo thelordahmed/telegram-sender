@@ -26,9 +26,9 @@ class Connections:
         self.view.append_newmessage_2.clicked.connect(
             lambda: self.view.appendToPlainTextBox_newmessage(self.view.message_text_2))
 
-        self.view.start_btn.clicked.connect(lambda: self.main.state.start_state("anony"))
-        self.view.start_btn_2.clicked.connect(lambda: self.main.state.start_state("familiar"))
-        self.view.stop_btn.clicked.connect(lambda: self.main.state.stop_state("anony"))
-        self.view.stop_btn_2.clicked.connect(lambda: self.main.state.stop_state("familiar"))
+        self.view.start_btn.clicked.connect(lambda: self.main.start_event("anony"))
+        self.view.start_btn_2.clicked.connect(lambda: self.main.start_event("familiar"))
+        self.view.stop_btn.clicked.connect(lambda: self.main.stop_event("anony"))
+        self.view.stop_btn_2.clicked.connect(lambda: self.main.stop_event("familiar"))
         self.view.newSession_btn.clicked.connect(lambda: self.main.newSession("anony"))
         self.view.newSession_btn_2.clicked.connect(lambda: self.main.newSession("familiar"))

@@ -7,7 +7,7 @@ class State:
         self.main = main
 
     def default_state(self):
-        self.view.container_tabwid.setCurrentIndex(1)
+        self.view.listWidget.setCurrentRow(self.view.container_tabwid.currentIndex())
         self.view.tabWidget_2.setCurrentIndex(0)
         self.view.tabWidget.setCurrentIndex(0)
         self.view.stop_btn.setDisabled(True)
@@ -15,27 +15,31 @@ class State:
 
     def start_state(self, mode):
         if mode == "anony":
-            self.view.start_btn.setDisabled(True)
-            self.view.stop_btn.setEnabled(True)
+            start_btn = self.view.start_btn
+            stop_btn = self.view.stop_btn
+            tab_item_toDisable = self.view.familiar
             self.view.tabWidget.setCurrentIndex(2)
-            self.view.familiar.setDisabled(True)
-            Thread(target=self.main.process_anony).start()
         else:
-            self.view.start_btn_2.setDisabled(True)
-            self.view.stop_btn_2.setEnabled(True)
+            start_btn = self.view.start_btn_2
+            stop_btn = self.view.stop_btn_2
+            tab_item_toDisable = self.view.anonymous
             self.view.tabWidget_2.setCurrentIndex(1)
-            self.view.anonymous.setDisabled(True)
-            Thread(target=self.main.process_familiar).start()
-        self.view.state = "started"
+        start_btn.setDisabled(True)
+        stop_btn.setEnabled(True)
+        tab_item_toDisable.setDisabled(True)
+
 
     def stop_state(self, mode):
         if mode == "anony":
-            self.view.start_btn.setEnabled(True)
-            self.view.stop_btn.setDisabled(True)
-            self.view.familiar.setEnabled(True)
+            start_btn = self.view.start_btn
+            stop_btn = self.view.stop_btn
+            tab_item_toEnable = self.view.familiar
         else:
-            self.view.start_btn_2.setEnabled(True)
-            self.view.stop_btn_2.setDisabled(True)
-            self.view.anonymous.setEnabled(True)
-        self.view.state = "stopped"
+            start_btn = self.view.start_btn_2
+            stop_btn = self.view.stop_btn_2
+            tab_item_toEnable = self.view.anonymous
+        start_btn.setEnabled(True)
+        stop_btn.setDisabled(True)
+        stop_btn.setText("")
+        tab_item_toEnable.setEnabled(True)
 

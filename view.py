@@ -16,10 +16,14 @@ class View(QMainWindow, design):
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setupUi(self)
         self.show()
+        # NEW SESSION BUTTON IS NOT NEEDED BECAUSE IMPORT CONTACTS BUTTON DO THE SAME TASK
+        self.newSession_btn.hide()
+        self.newSession_btn_2.hide()
         self.session = Session()
         self.state = "idle"
         self.api_url = api_url
         self.setWindowTitle(f"Telegram Bulk Sender {controller.version}")
+        self.container_tabwid.tabBar().hide()
         # hidding all to validate license first
         # TODO - DEBUUGING
         # self.tabWidget_2.hide()
@@ -128,6 +132,10 @@ class View(QMainWindow, design):
     def load_settings(self):
         settings = self.session.query(Settings).first()
         if settings is not None:
+            if settings.anonyMode == 1:
+                self.container_tabwid.setCurrentIndex(0)
+            else:
+                self.container_tabwid.setCurrentIndex(1)
             if settings.usernameModeAnony == 1:
                 self.username_rb.setChecked(True)
             else:
@@ -149,8 +157,11 @@ class View(QMainWindow, design):
             self.attachments_le_2.setText(settings.attachFamiliar)
             self.message_text.setPlainText(settings.messageAnony)
             self.message_text_2.setPlainText(settings.messageFamiliar)
+            # updating the listwidget
+            self.listWidget.setCurrentRow(self.container_tabwid.currentIndex())
 
     def save_settings(self, session: Session):
+        anonyMode = 1 if self.anonymous.isVisible() else 0
         usernameAnony = 1 if self.username_rb.isChecked() else 0
         usernameFamiliar = 1 if self.username_rb_2.isChecked() else 0
         messages = self.messages_sb.value()
@@ -160,7 +171,8 @@ class View(QMainWindow, design):
         attachFamiliar = self.attachments_le_2.text()
         messageAnony = self.message_text.toPlainText()
         messageFamiliar = self.message_text_2.toPlainText()
-        settings = Settings(usernameModeAnony=usernameAnony,
+        settings = Settings(anonyMode=anonyMode,
+                            usernameModeAnony=usernameAnony,
                             usernameModeFamiliar=usernameFamiliar,
                             messages=messages,
                             textFirstAnony=textFirstAnony,

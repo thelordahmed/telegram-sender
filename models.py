@@ -69,6 +69,7 @@ class ContactsFamiliar(Base):
 class Settings(Base):
     __tablename__ = "settings"
     id = Column(Integer, primary_key=True)
+    anonyMode = Column(Integer)
     usernameModeAnony = Column(Integer)
     usernameModeFamiliar = Column(Integer)
     textFirstAnony = Column(Integer)

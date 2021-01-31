@@ -1,4 +1,5 @@
 import csv
+import random
 import shutil
 from datetime import datetime, timedelta
 from PySide2 import QtCore
@@ -18,6 +19,7 @@ from ast import literal_eval
 
 
 # todo - (Future update) load the contacts to the interface in another thread
+# todo - handle unknown errors
 
 class Signals(QtCore.QObject):
     ok_message = QtCore.Signal(str, str)
@@ -30,17 +32,19 @@ class Main:
         self.session = Session()
         self.state = State(self.view, self)
         self.signals = Signals()
+        # CHECK ON LAST WORKING MODE
+        self.last_started = None    # "anony" | "familiar"
         try:
             os.mkdir(os.path.join(controller.accountsFolder))
         except FileExistsError:
             pass
-        self.onStart_event()
-
+        self.onAppStart_event()
         #################
         Connections(self.view, self)
         #################
 
-    def onStart_event(self):
+
+    def onAppStart_event(self):
         self.state.default_state()
         # loading accounts
         accounts = self.session.query(Account).all()
@@ -65,6 +69,27 @@ class Main:
                 data = (cont_familiar.name, cont_familiar.number, cont_familiar.status)
             self.view.addToTableWidget(data, self.view.tableWidget_2)
 
+
+    def stop_event(self, mode):
+        if mode == "anony":
+            stop_btn = self.view.stop_btn
+        else:
+            stop_btn = self.view.stop_btn_2
+        stop_btn.setDisabled(True)
+        stop_btn.setText("Stopping...")
+        self.view.state = "stop"
+
+
+    def start_event(self, mode):
+        if mode == "anony":
+            process_method = self.process_anony
+        else:
+            process_method = self.process_familiar
+        Thread(target=process_method).start()
+        self.view.state = "started"
+        self.state.start_state(mode)
+
+
     def get_inputDialog_value(self):
         """validating the input dialog return"""
         res = self.view.input_dialog()
@@ -74,6 +99,12 @@ class Main:
             pass
 
     def add_account(self, name):
+        if self.last_started is not None:
+            try:
+                Telegram.close()
+                sleep(1)
+            except:
+                pass
         self.view.setDisabled(True)
         Telegram.open(name)
         sleep(5)
@@ -247,10 +278,15 @@ class Main:
         """
         if mode == "anony":
             textFirst_rb = self.view.textFirst_rb
-            paths = literal_eval(self.view.attachments_le.text())
+            paths_string = self.view.attachments_le.text()
         else:
             textFirst_rb = self.view.textFirst_rb_2
-            paths = literal_eval(self.view.attachments_le.text())
+            paths_string = self.view.attachments_le_2.text()
+        # CHECK IF ATTACHMENT PROVIDED OR NOT
+        if paths_string != "":
+            paths = literal_eval(paths_string)
+        else:
+            paths = []
         # CHECK CONNECTION
         if Telegram.network_still_connected():
             # SEARCH FOR NUMBER OR USERNAME
@@ -265,7 +301,7 @@ class Main:
                     return "channel"
             # PREPARING THE MULTIPLE MESSAGES
             if "{new message}" in message:
-                multi_messages = message.split("{new message}")
+                multi_messages = message.split("\n\n\n{new message}\n\n")
             else:
                 multi_messages = [message]
             # SENDING TEXT & ATTACHMENTS
@@ -284,45 +320,75 @@ class Main:
             except TimeoutException:
                 return "connection lost"
 
-    def _status_update(self, table_widget: View, contact: ContactsAnony or ContactsFamiliar, session: Session, number: str, username: str, status: str, column: int):
+    def _status_update(self, table_widget: View, contact: ContactsAnony or ContactsFamiliar, account: Account or None, session: Session, number: str, username: str, status: str):
         # UPDATING STATUS IN DB
         contact.status = status
+        contact.sender = account
         session.commit()
         # UPDATING STATUS ON THE INTERFACE
         if number is not None:
-            self.view.editItemInTableWidget(table_widget, number, status, column)
+            # IF ACCOUNT IS NONE THEN WE ARE IN FAMILIAR PROCESS
+            if account is not None:
+                self.view.editItemInTableWidget(table_widget, number, status, 3)
+                self.view.editItemInTableWidget(table_widget, number, contact.sender.name, 1)
+            else:
+                self.view.editItemInTableWidget(table_widget, number, status, 2)
         else:
-            self.view.editItemInTableWidget(table_widget, username, status, column)
+            if account is not None:
+                self.view.editItemInTableWidget(table_widget, username, status, 3)
+                self.view.editItemInTableWidget(table_widget, username, contact.sender.name, 1)
+            else:
+                self.view.editItemInTableWidget(table_widget, username, status, 2)
+
+
 
 
     def process_anony(self):
+        # CHECK ON THE LAST MODE WAS WORKING TO CLOSE THE BROWSER IF SWITCHED TO ANOTHER
+        if self.last_started == "familiar":
+            Telegram.close()
+        self.last_started = "anony"
         session = Session()
         self.view.save_settings(session)
         messages = self.view.messages_sb.value()
         accounts = session.query(Account).all()
-        # TO CHECK REASON OF BREAKING CONTACTS LOOP
-        loop_check = None  # "Completed" | "Error" | "Account Limit"
+        # TO CHECK LOOP BREAK REASON
+        loop_check = None  # "Working" | "Error" | "Account Limit" | "Stopped" | "Sending"
         for acc in accounts:
+            # STOP BUTTON CHECK IF CLICKED
+            if self.view.state == "stop":
+                loop_check = "Stopped"
+                break
             if acc.sentCounter >= messages:
-                if (datetime.utcnow() - acc.sentDate) > timedelta(hours=24):
-                    # RESET SENT COUNTER OF THE ACCOUNT
-                    acc.sentCounter = 0
-                    session.commit()
-                else:
-                    # SKIP TO NEXT ACCOUNT
-                    continue
-            # to check if the software stopped before sending because of accounts reaching the limit or just finished the sending
-            loop_check = "Completed"
+                # AVOIDING A BUG: CHECK IF THIS ACCOUNT HAS A sentDate OR NOT
+                if acc.sentDate is not None:
+                    if (datetime.utcnow() - acc.sentDate) > timedelta(hours=24):
+                        # RESET SENT COUNTER OF THE ACCOUNT
+                        acc.sentCounter = 0
+                        session.commit()
+                    else:
+                        # SKIP TO NEXT ACCOUNT
+                        continue
+            # TO CHECK LOOP BREAK REASON -> TO DETRMINE WHICH MESSAGE TO SHOW WHEN FINISH
+            loop_check = "Working"
             # OPEN THE ACCOUNT BROWSER WINDOW
             Telegram.open(acc.name)
             # GET CONTACTS WITH STATUS "--"
             contacts = session.query(ContactsAnony).filter_by(status="--").all()
             # CONTACTS LOOP
             for contact in contacts:
+                # TO DETRMINE WHICH MESSAGE TO SHOW WHEN FINISH
+                loop_check = "Sending"
+                # STOP BUTTON CHECK IF CLICKED
+                if self.view.state == "stop":
+                    # TO CHECK LOOP BREAK REASON
+                    loop_check = "Stopped"
+                    break
                 # CHECK IF ACCOUNT REACHED SENDING LIMIT
                 if acc.sentCounter == messages:
                     acc.sentDate = datetime.utcnow()
                     session.commit()
+                    # TO CHECK LOOP BREAK REASON
                     loop_check = "Account Limit"
                     break
                 # SENDING
@@ -333,20 +399,26 @@ class Main:
                     number = contact.number
                     username = None
                 message = self.view.message_text.toPlainText().replace("{name}", contact.name)
+                # STOP BUTTON CHECK IF CLICKED
+                if self.view.state == "stop":
+                    # TO CHECK LOOP BREAK REASON
+                    loop_check = "Stopped"
+                    break
                 res = self._sending_process("anony", number, username, message, Telegram)
                 # SENDING ERRORS CHECK
                 if res == "not found":
-                    self._status_update(self.view.tableWidget, contact, session, number, username,
-                                        "Not Found on Telegram!", 3)
+                    self._status_update(self.view.tableWidget, contact, acc, session, number, username,
+                                        "Not Found on Telegram!")
                 elif res == "channel":
-                    self._status_update(self.view.tableWidget, contact, session, number, username,
-                                        "Channel Found.. unable to send!", 3)
+                    self._status_update(self.view.tableWidget, contact, acc, session, number, username,
+                                        "Channel Found.. unable to send!")
                 elif res == "connection lost":
+                    # TO CHECK LOOP BREAK REASON
                     loop_check = "Error"
                     break
                 else:
-                    self._status_update(self.view.tableWidget, contact, session, number, username,
-                                        "Message Sent!", 3)
+                    self._status_update(self.view.tableWidget, contact, acc, session, number, username,
+                                        "Message Sent!")
                     # INCREASING SENT COUNER IN ACCOUNT
                     acc.sentCounter += 1
                     session.commit()
@@ -360,24 +432,92 @@ class Main:
                 self.signals.ok_message.emit("Error", "Connection was lost for more 1 hour\nPlease check your network then try again")
                 break
             # BREAK ACCOUNTS LOOP IF COMPLETED
-            elif loop_check == "Completed":
+            elif loop_check == "Sending":
                 self.signals.ok_message.emit("Completed", "Session Completed Successfully ^_^")
+                break
+            # BREAK ACCOUNTS LOOP IF CONTACTS LIST IS EMPTY
+            elif loop_check == "Working":
+                self.signals.ok_message.emit("Attention",
+                                             "Already sent the message to all contacts")
                 break
             # BREAK ACCOUNTS LOOP IF ALL ACCOUNTS ALREADY REACHED LIMIT
             else:
                 break
+
         # SHOW THIS MESSAGE ONLY WHEN ALL ACCOUNTS REACH LIMIT
-        if loop_check is None:
+        if loop_check is None or loop_check == "Account Limit":
             self.signals.ok_message.emit("Limit Reached",
                                          "All listed accountes have reached the sending limit for today\nplease add more accounts or try sending again tomorrow")
+            self.state.stop_state("anony")
             # todo - (Future update) option for the user to make software sleep for 24 hours when all account reach limit
+        else:
+            self.state.stop_state("anony")
+
 
 
     def process_familiar(self):
+        # CHECK ON THE LAST MODE WAS WORKING TO CLOSE THE BROWSER IF SWITCHED TO ANOTHER
+        if self.last_started == "anony":
+            Telegram.close()
+        self.last_started = "familiar"
         session = Session()
         self.view.save_settings(session)
-        # loop on messages
-        # TODO
+        # TO CHECK REASON OF BREAKING CONTACTS LOOP
+        loop_check = None  # "Sending" | "Error" | "Account Limit" | "Stopped"
+        # OPEN THE ACCOUNT BROWSER WINDOW
+        Telegram.open("browserData")
+        # GET CONTACTS WITH STATUS "--"
+        contacts = session.query(ContactsFamiliar).filter_by(status="--").all()
+        # CONTACTS LOOP
+        for contact in contacts:
+            # TO CHECK LOOP BREAK REASON
+            loop_check = "Sending"
+            # STOP BUTTON CHECK IF CLICKED
+            if self.view.state == "stop":
+                loop_check = "Stopped"
+                break
+            # BREAKING THE PATTERN
+            sleep(random.randint(1, 5))
+            # SENDING
+            if self.view.username_rb_2.isChecked():
+                number = None
+                username = contact.username
+            else:
+                number = contact.number
+                username = None
+            message = self.view.message_text_2.toPlainText().replace("{name}", contact.name)
+            res = self._sending_process("familiar", number, username, message, Telegram)
+            # SENDING ERRORS CHECK
+            if res == "not found":
+                self._status_update(self.view.tableWidget_2, contact, None, session, number, username,
+                                    "Not Found on Telegram!")
+            elif res == "channel":
+                self._status_update(self.view.tableWidget_2, contact, None, session, number, username,
+                                    "Channel Found.. unable to send!")
+            elif res == "connection lost":
+                loop_check = "Error"
+                break
+            else:
+                self._status_update(self.view.tableWidget_2, contact, None, session, number, username,
+                                    "Message Sent!")
+        # SHOW THIS IF CONNECTION ERROR FOR MORE THAT 1 HOUR
+        if loop_check == "Error":
+            self.signals.ok_message.emit("Error",
+                                         "Connection was lost for more 1 hour\nPlease check your network then try again")
+        # SHOW THIS IF STOP BUTTON CLICKED
+        elif loop_check == "Stopped":
+            pass
+        # SHOW THIS IF MESSAGES LIST IS EMPTY
+        elif loop_check is None:
+            self.signals.ok_message.emit("Attention", "Already sent the message to all contacts")
+        # SHOW THIS IF FINISHED SENDING
+        elif loop_check == "Sending":
+            self.signals.ok_message.emit("Completed", "Session Completed Successfully ^_^")
+
+        self.state.stop_state("familiar")
+
+        # TODO - not completed
+
 
 
 if __name__ == '__main__':

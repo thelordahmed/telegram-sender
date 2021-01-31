@@ -21,14 +21,81 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(634, 966)
+        MainWindow.resize(715, 974)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setSpacing(0)
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.horizontalLayout_6.setContentsMargins(0, 0, -1, -1)
+        self.listWidget = QListWidget(self.centralwidget)
+        QListWidgetItem(self.listWidget)
+        QListWidgetItem(self.listWidget)
+        self.listWidget.setObjectName(u"listWidget")
+        sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.listWidget.sizePolicy().hasHeightForWidth())
+        self.listWidget.setSizePolicy(sizePolicy)
+        self.listWidget.setMinimumSize(QSize(160, 0))
+        self.listWidget.setStyleSheet(u"QListView { /* The tab widget frame */\n"
+"    background:transparent;\n"
+"	font-weight:bold;\n"
+"}\n"
+"\n"
+"QListView::item {\n"
+"    background: qlineargradient(spread:pad, x1:0.44335, y1:0.482955, x2:1, y2:0, stop:0 rgba(219, 219, 219, 255), stop:1 rgba(255, 255, 255, 255));\n"
+"    border: 2px solid #C4C4C3;\n"
+"    border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"    min-width: 8ex;\n"
+"    padding: 20px 0;\n"
+"}\n"
+"\n"
+"QListView::item:selected, QListView::item:hover {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0 #fafafa, stop: 0.4 #f4f4f4,\n"
+"                                stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);\n"
+"}\n"
+"\n"
+"QListView::item:selected {\n"
+"    border-color: #9B9B9B;\n"
+"    border-bottom-color: #C2C7CB;\n"
+"	color:black;\n"
+"	border-right: 0;\n"
+"}\n"
+"\n"
+"QListView::item:!selected {\n"
+"    margin-top: 0px; /* make non-selected tabs look smaller */\n"
+"}\n"
+"\n"
+"\n"
+"\n"
+"")
+        self.listWidget.setLineWidth(1)
+        self.listWidget.setFlow(QListView.TopToBottom)
+        self.listWidget.setProperty("isWrapping", False)
+        self.listWidget.setResizeMode(QListView.Fixed)
+        self.listWidget.setLayoutMode(QListView.SinglePass)
+        self.listWidget.setSpacing(0)
+        self.listWidget.setViewMode(QListView.ListMode)
+        self.listWidget.setModelColumn(0)
+        self.listWidget.setUniformItemSizes(False)
+        self.listWidget.setBatchSize(100)
+        self.listWidget.setWordWrap(False)
+        self.listWidget.setSelectionRectVisible(False)
+
+        self.horizontalLayout_6.addWidget(self.listWidget)
+
         self.container_tabwid = QTabWidget(self.centralwidget)
         self.container_tabwid.setObjectName(u"container_tabwid")
-        self.container_tabwid.setTabPosition(QTabWidget.West)
+        self.container_tabwid.setStyleSheet(u"")
+        self.container_tabwid.setTabPosition(QTabWidget.North)
+        self.container_tabwid.setElideMode(Qt.ElideRight)
+        self.container_tabwid.setUsesScrollButtons(False)
+        self.container_tabwid.setDocumentMode(False)
+        self.container_tabwid.setTabBarAutoHide(False)
         self.anonymous = QWidget()
         self.anonymous.setObjectName(u"anonymous")
         self.verticalLayout_9 = QVBoxLayout(self.anonymous)
@@ -36,12 +103,41 @@ class Ui_MainWindow(object):
         self.verticalLayout_9.setContentsMargins(-1, -1, -1, 0)
         self.tabWidget = QTabWidget(self.anonymous)
         self.tabWidget.setObjectName(u"tabWidget")
-        self.tabWidget.setStyleSheet(u"QTabBar::tab{\n"
-"	padding:10px 15px;\n"
-"	font-weight:bold\n"
+        self.tabWidget.setStyleSheet(u"QTabWidget::pane { /* The tab widget frame */\n"
+"    border-top: 2px solid #C2C7CB;\n"
+"    position: absolute;\n"
+"    top: -0.5em;\n"
 "}\n"
 "\n"
-"")
+"QTabWidget::tab-bar {\n"
+"    alignment: center;\n"
+"}\n"
+"\n"
+"/* Style the tab using the tab sub-control. Note that\n"
+"    it reads QTabBar _not_ QTabWidget */\n"
+"QTabBar::tab {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,\n"
+"                                stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);\n"
+"    border: 2px solid #C4C4C3;\n"
+"    border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"    border-top-left-radius: 4px;\n"
+"    border-top-right-radius: 4px;\n"
+"    min-width: 8ex;\n"
+"    padding: 8px;\n"
+"}\n"
+"\n"
+"QTabBar::tab:selected, QTabBar::tab:hover {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0 #fafafa, stop: 0.4 #f4f4f4,\n"
+"                                stop: 0.5 #e7e7e7, stop: 1.0 "
+                        "#fafafa);\n"
+"}\n"
+"\n"
+"QTabBar::tab:selected {\n"
+"    border-color: #9B9B9B;\n"
+"    border-bottom-color: #C2C7CB; /* same as pane color */\n"
+"}")
         self.tabWidget.setIconSize(QSize(15, 15))
         self.accounts = QWidget()
         self.accounts.setObjectName(u"accounts")
@@ -80,11 +176,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.groupBox_3 = QGroupBox(self.main)
         self.groupBox_3.setObjectName(u"groupBox_3")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox_3.sizePolicy().hasHeightForWidth())
-        self.groupBox_3.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.groupBox_3.sizePolicy().hasHeightForWidth())
+        self.groupBox_3.setSizePolicy(sizePolicy1)
         self.groupBox_3.setMaximumSize(QSize(16777215, 16777215))
         font = QFont()
         font.setFamily(u"arial")
@@ -101,19 +197,19 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setContentsMargins(-1, 20, -1, 20)
         self.phone_rb = QRadioButton(self.groupBox_3)
         self.phone_rb.setObjectName(u"phone_rb")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.phone_rb.sizePolicy().hasHeightForWidth())
-        self.phone_rb.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.phone_rb.sizePolicy().hasHeightForWidth())
+        self.phone_rb.setSizePolicy(sizePolicy2)
         self.phone_rb.setChecked(True)
 
         self.horizontalLayout_2.addWidget(self.phone_rb)
 
         self.username_rb = QRadioButton(self.groupBox_3)
         self.username_rb.setObjectName(u"username_rb")
-        sizePolicy1.setHeightForWidth(self.username_rb.sizePolicy().hasHeightForWidth())
-        self.username_rb.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.username_rb.sizePolicy().hasHeightForWidth())
+        self.username_rb.setSizePolicy(sizePolicy2)
 
         self.horizontalLayout_2.addWidget(self.username_rb)
 
@@ -122,8 +218,8 @@ class Ui_MainWindow(object):
 
         self.groupBox_9 = QGroupBox(self.main)
         self.groupBox_9.setObjectName(u"groupBox_9")
-        sizePolicy.setHeightForWidth(self.groupBox_9.sizePolicy().hasHeightForWidth())
-        self.groupBox_9.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.groupBox_9.sizePolicy().hasHeightForWidth())
+        self.groupBox_9.setSizePolicy(sizePolicy1)
         font1 = QFont()
         font1.setBold(True)
         font1.setWeight(75)
@@ -137,11 +233,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_16.setContentsMargins(-1, 0, -1, 10)
         self.groupBox = QGroupBox(self.groupBox_9)
         self.groupBox.setObjectName(u"groupBox")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
-        self.groupBox.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
+        self.groupBox.setSizePolicy(sizePolicy3)
         self.verticalLayout_3 = QVBoxLayout(self.groupBox)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.textFirst_rb = QRadioButton(self.groupBox)
@@ -160,14 +256,14 @@ class Ui_MainWindow(object):
 
         self.groupBox_10 = QGroupBox(self.groupBox_9)
         self.groupBox_10.setObjectName(u"groupBox_10")
-        sizePolicy1.setHeightForWidth(self.groupBox_10.sizePolicy().hasHeightForWidth())
-        self.groupBox_10.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.groupBox_10.sizePolicy().hasHeightForWidth())
+        self.groupBox_10.setSizePolicy(sizePolicy2)
         self.horizontalLayout = QHBoxLayout(self.groupBox_10)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.messages_sb = QSpinBox(self.groupBox_10)
         self.messages_sb.setObjectName(u"messages_sb")
-        sizePolicy1.setHeightForWidth(self.messages_sb.sizePolicy().hasHeightForWidth())
-        self.messages_sb.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.messages_sb.sizePolicy().hasHeightForWidth())
+        self.messages_sb.setSizePolicy(sizePolicy2)
         self.messages_sb.setMinimumSize(QSize(0, 0))
         self.messages_sb.setMaximumSize(QSize(60, 16777215))
         self.messages_sb.setStyleSheet(u"")
@@ -186,8 +282,8 @@ class Ui_MainWindow(object):
 
         self.groupBox_4 = QGroupBox(self.main)
         self.groupBox_4.setObjectName(u"groupBox_4")
-        sizePolicy.setHeightForWidth(self.groupBox_4.sizePolicy().hasHeightForWidth())
-        self.groupBox_4.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.groupBox_4.sizePolicy().hasHeightForWidth())
+        self.groupBox_4.setSizePolicy(sizePolicy1)
         self.groupBox_4.setMaximumSize(QSize(16777215, 16777215))
         self.groupBox_4.setFont(font1)
         self.groupBox_4.setAlignment(Qt.AlignCenter)
@@ -201,7 +297,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.attachments_le = QLineEdit(self.groupBox_4)
         self.attachments_le.setObjectName(u"attachments_le")
-        self.attachments_le.setReadOnly(True)
+        self.attachments_le.setReadOnly(False)
 
         self.horizontalLayout_3.addWidget(self.attachments_le)
 
@@ -218,11 +314,11 @@ class Ui_MainWindow(object):
 
         self.groupBox_5 = QGroupBox(self.main)
         self.groupBox_5.setObjectName(u"groupBox_5")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.groupBox_5.sizePolicy().hasHeightForWidth())
-        self.groupBox_5.setSizePolicy(sizePolicy3)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.groupBox_5.sizePolicy().hasHeightForWidth())
+        self.groupBox_5.setSizePolicy(sizePolicy4)
         self.groupBox_5.setMaximumSize(QSize(16777215, 16777215))
         self.groupBox_5.setFont(font1)
         self.groupBox_5.setAlignment(Qt.AlignCenter)
@@ -231,8 +327,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.setContentsMargins(-1, 5, -1, 5)
         self.frame1 = QFrame(self.groupBox_5)
         self.frame1.setObjectName(u"frame1")
-        sizePolicy.setHeightForWidth(self.frame1.sizePolicy().hasHeightForWidth())
-        self.frame1.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.frame1.sizePolicy().hasHeightForWidth())
+        self.frame1.setSizePolicy(sizePolicy1)
         self.horizontalLayout_7 = QHBoxLayout(self.frame1)
         self.horizontalLayout_7.setSpacing(5)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
@@ -252,11 +348,11 @@ class Ui_MainWindow(object):
 
         self.message_text = QPlainTextEdit(self.groupBox_5)
         self.message_text.setObjectName(u"message_text")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.message_text.sizePolicy().hasHeightForWidth())
-        self.message_text.setSizePolicy(sizePolicy4)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.message_text.sizePolicy().hasHeightForWidth())
+        self.message_text.setSizePolicy(sizePolicy5)
         self.message_text.setMaximumSize(QSize(16777215, 60))
 
         self.verticalLayout_6.addWidget(self.message_text)
@@ -298,6 +394,7 @@ class Ui_MainWindow(object):
         self.tableWidget.setObjectName(u"tableWidget")
         self.tableWidget.setMinimumSize(QSize(493, 0))
         self.tableWidget.setMaximumSize(QSize(493, 16777215))
+        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
 
         self.verticalLayout_2.addWidget(self.tableWidget)
@@ -314,8 +411,8 @@ class Ui_MainWindow(object):
 
         self.newSession_btn = QPushButton(self.report)
         self.newSession_btn.setObjectName(u"newSession_btn")
-        sizePolicy1.setHeightForWidth(self.newSession_btn.sizePolicy().hasHeightForWidth())
-        self.newSession_btn.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.newSession_btn.sizePolicy().hasHeightForWidth())
+        self.newSession_btn.setSizePolicy(sizePolicy2)
         self.newSession_btn.setStyleSheet(u"padding:10px 20px")
         icon7 = QIcon()
         icon7.addFile(u":/black-icons/Data/imgs/black icons/icons8-trash-can-500.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -368,8 +465,8 @@ class Ui_MainWindow(object):
 
         self.horizontalFrame = QFrame(self.anonymous)
         self.horizontalFrame.setObjectName(u"horizontalFrame")
-        sizePolicy1.setHeightForWidth(self.horizontalFrame.sizePolicy().hasHeightForWidth())
-        self.horizontalFrame.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.horizontalFrame.sizePolicy().hasHeightForWidth())
+        self.horizontalFrame.setSizePolicy(sizePolicy2)
         self.horizontalLayout_10 = QHBoxLayout(self.horizontalFrame)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.horizontalLayout_10.setContentsMargins(-1, 0, -1, -1)
@@ -404,12 +501,41 @@ class Ui_MainWindow(object):
         self.verticalLayout_15.setContentsMargins(-1, -1, -1, 0)
         self.tabWidget_2 = QTabWidget(self.familiar)
         self.tabWidget_2.setObjectName(u"tabWidget_2")
-        self.tabWidget_2.setStyleSheet(u"QTabBar::tab{\n"
-"	padding:10px 15px;\n"
-"	font-weight:bold\n"
+        self.tabWidget_2.setStyleSheet(u"QTabWidget::pane { /* The tab widget frame */\n"
+"    border-top: 2px solid #C2C7CB;\n"
+"    position: absolute;\n"
+"    top: -0.5em;\n"
 "}\n"
 "\n"
-"")
+"QTabWidget::tab-bar {\n"
+"    alignment: center;\n"
+"}\n"
+"\n"
+"/* Style the tab using the tab sub-control. Note that\n"
+"    it reads QTabBar _not_ QTabWidget */\n"
+"QTabBar::tab {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,\n"
+"                                stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);\n"
+"    border: 2px solid #C4C4C3;\n"
+"    border-bottom-color: #C2C7CB; /* same as the pane color */\n"
+"    border-top-left-radius: 4px;\n"
+"    border-top-right-radius: 4px;\n"
+"    min-width: 8ex;\n"
+"    padding: 8px;\n"
+"}\n"
+"\n"
+"QTabBar::tab:selected, QTabBar::tab:hover {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0 #fafafa, stop: 0.4 #f4f4f4,\n"
+"                                stop: 0.5 #e7e7e7, stop: 1.0 "
+                        "#fafafa);\n"
+"}\n"
+"\n"
+"QTabBar::tab:selected {\n"
+"    border-color: #9B9B9B;\n"
+"    border-bottom-color: #C2C7CB; /* same as pane color */\n"
+"}")
         self.tabWidget_2.setIconSize(QSize(15, 15))
         self.main_2 = QWidget()
         self.main_2.setObjectName(u"main_2")
@@ -419,8 +545,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_11.setContentsMargins(-1, 12, -1, 0)
         self.groupBox_6 = QGroupBox(self.main_2)
         self.groupBox_6.setObjectName(u"groupBox_6")
-        sizePolicy.setHeightForWidth(self.groupBox_6.sizePolicy().hasHeightForWidth())
-        self.groupBox_6.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.groupBox_6.sizePolicy().hasHeightForWidth())
+        self.groupBox_6.setSizePolicy(sizePolicy1)
         self.groupBox_6.setMaximumSize(QSize(16777215, 16777215))
         self.groupBox_6.setFont(font)
         self.groupBox_6.setStyleSheet(u"QGroupBox{\n"
@@ -433,16 +559,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.setContentsMargins(-1, 20, -1, 20)
         self.phone_rb_2 = QRadioButton(self.groupBox_6)
         self.phone_rb_2.setObjectName(u"phone_rb_2")
-        sizePolicy1.setHeightForWidth(self.phone_rb_2.sizePolicy().hasHeightForWidth())
-        self.phone_rb_2.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.phone_rb_2.sizePolicy().hasHeightForWidth())
+        self.phone_rb_2.setSizePolicy(sizePolicy2)
         self.phone_rb_2.setChecked(True)
 
         self.horizontalLayout_5.addWidget(self.phone_rb_2)
 
         self.username_rb_2 = QRadioButton(self.groupBox_6)
         self.username_rb_2.setObjectName(u"username_rb_2")
-        sizePolicy1.setHeightForWidth(self.username_rb_2.sizePolicy().hasHeightForWidth())
-        self.username_rb_2.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.username_rb_2.sizePolicy().hasHeightForWidth())
+        self.username_rb_2.setSizePolicy(sizePolicy2)
 
         self.horizontalLayout_5.addWidget(self.username_rb_2)
 
@@ -457,8 +583,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.groupBox_11 = QGroupBox(self.groupBox_2)
         self.groupBox_11.setObjectName(u"groupBox_11")
-        sizePolicy2.setHeightForWidth(self.groupBox_11.sizePolicy().hasHeightForWidth())
-        self.groupBox_11.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.groupBox_11.sizePolicy().hasHeightForWidth())
+        self.groupBox_11.setSizePolicy(sizePolicy3)
         self.verticalLayout_4 = QVBoxLayout(self.groupBox_11)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.textFirst_rb_2 = QRadioButton(self.groupBox_11)
@@ -480,8 +606,8 @@ class Ui_MainWindow(object):
 
         self.groupBox_7 = QGroupBox(self.main_2)
         self.groupBox_7.setObjectName(u"groupBox_7")
-        sizePolicy.setHeightForWidth(self.groupBox_7.sizePolicy().hasHeightForWidth())
-        self.groupBox_7.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.groupBox_7.sizePolicy().hasHeightForWidth())
+        self.groupBox_7.setSizePolicy(sizePolicy1)
         self.groupBox_7.setMaximumSize(QSize(16777215, 16777215))
         self.groupBox_7.setFont(font1)
         self.groupBox_7.setAlignment(Qt.AlignCenter)
@@ -495,7 +621,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.attachments_le_2 = QLineEdit(self.groupBox_7)
         self.attachments_le_2.setObjectName(u"attachments_le_2")
-        self.attachments_le_2.setReadOnly(True)
+        self.attachments_le_2.setReadOnly(False)
 
         self.horizontalLayout_8.addWidget(self.attachments_le_2)
 
@@ -512,8 +638,8 @@ class Ui_MainWindow(object):
 
         self.groupBox_8 = QGroupBox(self.main_2)
         self.groupBox_8.setObjectName(u"groupBox_8")
-        sizePolicy.setHeightForWidth(self.groupBox_8.sizePolicy().hasHeightForWidth())
-        self.groupBox_8.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.groupBox_8.sizePolicy().hasHeightForWidth())
+        self.groupBox_8.setSizePolicy(sizePolicy1)
         self.groupBox_8.setMaximumSize(QSize(16777215, 16777215))
         self.groupBox_8.setFont(font1)
         self.groupBox_8.setAlignment(Qt.AlignCenter)
@@ -588,8 +714,8 @@ class Ui_MainWindow(object):
 
         self.newSession_btn_2 = QPushButton(self.report_2)
         self.newSession_btn_2.setObjectName(u"newSession_btn_2")
-        sizePolicy1.setHeightForWidth(self.newSession_btn_2.sizePolicy().hasHeightForWidth())
-        self.newSession_btn_2.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.newSession_btn_2.sizePolicy().hasHeightForWidth())
+        self.newSession_btn_2.setSizePolicy(sizePolicy2)
         self.newSession_btn_2.setStyleSheet(u"padding:10px 20px")
         self.newSession_btn_2.setIcon(icon7)
 
@@ -634,8 +760,8 @@ class Ui_MainWindow(object):
 
         self.horizontalFrame_2 = QFrame(self.familiar)
         self.horizontalFrame_2.setObjectName(u"horizontalFrame_2")
-        sizePolicy1.setHeightForWidth(self.horizontalFrame_2.sizePolicy().hasHeightForWidth())
-        self.horizontalFrame_2.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.horizontalFrame_2.sizePolicy().hasHeightForWidth())
+        self.horizontalFrame_2.setSizePolicy(sizePolicy2)
         self.horizontalLayout_15 = QHBoxLayout(self.horizontalFrame_2)
         self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
         self.horizontalLayout_15.setContentsMargins(-1, 0, -1, 10)
@@ -660,12 +786,15 @@ class Ui_MainWindow(object):
 
         self.container_tabwid.addTab(self.familiar, "")
 
-        self.verticalLayout.addWidget(self.container_tabwid)
+        self.horizontalLayout_6.addWidget(self.container_tabwid)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_6)
 
         self.license_frame = QFrame(self.centralwidget)
         self.license_frame.setObjectName(u"license_frame")
-        sizePolicy.setHeightForWidth(self.license_frame.sizePolicy().hasHeightForWidth())
-        self.license_frame.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.license_frame.sizePolicy().hasHeightForWidth())
+        self.license_frame.setSizePolicy(sizePolicy1)
         self.license_frame.setStyleSheet(u"QFrame{\n"
 "	background:transparent\n"
 "}")
@@ -694,8 +823,8 @@ class Ui_MainWindow(object):
 
         self.license_status_label = QTextBrowser(self.license_frame)
         self.license_status_label.setObjectName(u"license_status_label")
-        sizePolicy3.setHeightForWidth(self.license_status_label.sizePolicy().hasHeightForWidth())
-        self.license_status_label.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.license_status_label.sizePolicy().hasHeightForWidth())
+        self.license_status_label.setSizePolicy(sizePolicy4)
         self.license_status_label.setMinimumSize(QSize(0, 100))
         self.license_status_label.setMaximumSize(QSize(16777215, 100))
         self.license_status_label.setStyleSheet(u"color:#e63c41;\n"
@@ -715,8 +844,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_13.setContentsMargins(-1, 1, -1, -1)
         self.commandLinkButton = QCommandLinkButton(self.frame2)
         self.commandLinkButton.setObjectName(u"commandLinkButton")
-        sizePolicy2.setHeightForWidth(self.commandLinkButton.sizePolicy().hasHeightForWidth())
-        self.commandLinkButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.commandLinkButton.sizePolicy().hasHeightForWidth())
+        self.commandLinkButton.setSizePolicy(sizePolicy3)
         self.commandLinkButton.setMaximumSize(QSize(16777215, 25))
         self.commandLinkButton.setFont(font2)
         self.commandLinkButton.setCursor(QCursor(Qt.PointingHandCursor))
@@ -742,9 +871,11 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+        self.listWidget.currentRowChanged.connect(self.container_tabwid.setCurrentIndex)
 
+        self.listWidget.setCurrentRow(0)
         self.container_tabwid.setCurrentIndex(1)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.tabWidget_2.setCurrentIndex(0)
 
 
@@ -753,6 +884,15 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+
+        __sortingEnabled = self.listWidget.isSortingEnabled()
+        self.listWidget.setSortingEnabled(False)
+        ___qlistwidgetitem = self.listWidget.item(0)
+        ___qlistwidgetitem.setText(QCoreApplication.translate("MainWindow", u"Anonymous", None));
+        ___qlistwidgetitem1 = self.listWidget.item(1)
+        ___qlistwidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Familiar", None));
+        self.listWidget.setSortingEnabled(__sortingEnabled)
+
         self.addAccount_btn.setText(QCoreApplication.translate("MainWindow", u"Add", None))
         self.removeAccount_btn.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.accounts), QCoreApplication.translate("MainWindow", u"Accounts", None))

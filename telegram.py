@@ -1,7 +1,7 @@
 import os
 import random
 from time import sleep
-from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
+from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -10,8 +10,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from controller import browserData, accountsFolder
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium import webdriver
 
+from selenium import webdriver
 
 # search with username
 # https://web.telegram.org/#/im?p=@USERNAME
@@ -38,6 +38,7 @@ class Telegram:
     connectionLost_div = '//div[@class="tg_head_connecting_wrap" and @ng-switch="offlineConnecting"]'
     # this will show if username not found
     error_modal = '//div[@class="error_modal_wrap md_simple_modal_wrap"]'
+    error_modal_okBtn = '//div[@class="error_modal_wrap md_simple_modal_wrap"]//button'
     # this will be visible if this is channel (unable to send)
     channel_div = '//div[@ng-switch-when="channel"]'
 
@@ -53,7 +54,6 @@ class Telegram:
         chrome_options.add_argument(r'--user-data-dir=' + account)
         if cls._handle is None:
             cls._window = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options, service_args=args )
-            cls._window.implicitly_wait(2)
             cls._window.get("https://web.telegram.org")
             cls._handle = cls._window.current_window_handle
             # waiting for the telegram to login
@@ -109,17 +109,18 @@ class Telegram:
         opens the contact chat - returns False if contact not foound - or "channel" if it's a channel
         """
         # TRY OPENING THE USERNAME
+        print("debug")
         cls._window.get(f"https://web.telegram.org/#/im?p=@{username}")
-        sleep(5)
+        sleep(random.randint(1, 3))
         # CHECK ON CONNECTION
         if cls.network_still_connected() is False:
             WebDriverWait(cls._window, 3600).until(ec.invisibility_of_element_located((By.XPATH, cls.connectionLost_div)))
             cls._window.get(f"https://web.telegram.org/#/im?p=@{username}")
         # CHECK ON NOT FOUND ERROR MESSAGE
         try:
-            cls._window.find_element_by_xpath(cls.error_modal)
+            WebDriverWait(cls._window, 2).until(ec.presence_of_element_located((By.XPATH, cls.error_modal_okBtn))).click()
             return False
-        except NoSuchElementException:
+        except TimeoutException:
             pass
         # CHECK IF IT'S CHANNEL
         try:
@@ -142,31 +143,24 @@ class Telegram:
             actions.key_up(Keys.SHIFT)
             actions.key_up(Keys.ENTER)
         actions.perform()
-        sleep(1)
+        sleep(random.randint(1, 3))
         message_input.send_keys(Keys.ENTER)
+
 
 
     @classmethod
     def sending_attachment(cls, paths: list):
         # (ALGORITHM) PASSING MULTIPLE FILES TO INPUT ELEMENT
-        multiple_paths = paths[0]
+        if len(paths) != 0:
+            multiple_paths = paths[0]
+        else:
+            return False
         if len(paths) > 1:
             for path in paths[1:]:
                 multiple_paths += "\n" + path
         sleep(1)
         cls._window.find_element_by_xpath(cls.attachment_input).send_keys(multiple_paths)
         sleep(random.randint(1, 2))
-
-
-    # @classmethod
-    # def sending_document(cls, paths):
-    #     multiple_paths = paths[0]
-    #     if len(paths) > 1:
-    #         for path in paths[1:]:
-    #             multiple_paths += "\n" + path
-    #     sleep(1)
-    #     cls._window.find_element_by_xpath(cls.document_input).send_keys(multiple_paths)
-    #     sleep(random.randint(1, 2))
 
 
     @classmethod
