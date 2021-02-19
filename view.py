@@ -16,6 +16,11 @@ class View(QMainWindow, design):
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setupUi(self)
         self.show()
+        self.spinner_gif = QtGui.QMovie(":/spinners/Data/imgs/ajax-loader.gif")
+        self.spinner.setMovie(self.spinner_gif)
+        self.spinner_gif.start()
+        self.spinner.hide()
+        self.refresh_groups_btn.setDisabled(True)
         # NEW SESSION BUTTON IS NOT NEEDED BECAUSE IMPORT CONTACTS BUTTON DO THE SAME TASK
         self.newSession_btn.hide()
         self.newSession_btn_2.hide()
@@ -24,12 +29,9 @@ class View(QMainWindow, design):
         self.api_url = api_url
         self.setWindowTitle(f"Telegram Bulk Sender {controller.version}")
         self.container_tabwid.tabBar().hide()
-        # hidding all to validate license first
-        # TODO - DEBUUGING
-        # self.tabWidget_2.hide()
         self.license_frame.hide()
         self.adjustSize()
-        self.commandLinkButton.setText(f"Copyright © 2020 {controller.copyright_text}")
+        self.commandLinkButton.setText(f"Copyright © 2021 {controller.copyright_text}")
 
 
     @staticmethod
@@ -74,6 +76,11 @@ class View(QMainWindow, design):
         row = tablewidget_object.row(item)
         tablewidget_object.setItem(row, column, QTableWidgetItem(value))
 
+    @staticmethod
+    def addToListWidget(items: list, listwidget: QListWidget):
+        for item in items:
+            listwidget.addItem(item)
+
 
     def confirmMessage(self, title: str, text: str, mode="question"):
         """
@@ -115,6 +122,10 @@ class View(QMainWindow, design):
     def get_file_path(self, title, extensions_range):
         path = QFileDialog.getOpenFileName(self, title, "", extensions_range)
         return path[0]
+
+    def get_folder_path(self, title):
+        path = QFileDialog.getExistingDirectory(self, title, "")
+        return path
 
     @staticmethod
     def appendToPlainTextBox(plaintextedit_object: QPlainTextEdit, text: str):

@@ -21,18 +21,30 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(715, 974)
+        MainWindow.resize(782, 1015)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.horizontalLayout_6 = QHBoxLayout()
+        self.mainwindow_frame = QFrame(self.centralwidget)
+        self.mainwindow_frame.setObjectName(u"mainwindow_frame")
+        self.horizontalLayout_6 = QHBoxLayout(self.mainwindow_frame)
         self.horizontalLayout_6.setSpacing(0)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.horizontalLayout_6.setContentsMargins(0, 0, -1, -1)
-        self.listWidget = QListWidget(self.centralwidget)
-        QListWidgetItem(self.listWidget)
-        QListWidgetItem(self.listWidget)
+        self.horizontalLayout_6.setContentsMargins(1, 1, -1, -1)
+        self.listWidget = QListWidget(self.mainwindow_frame)
+        icon = QIcon()
+        icon.addFile(u":/black-icons/Data/imgs/black icons/icons8-decision-52.png", QSize(), QIcon.Normal, QIcon.Off)
+        __qlistwidgetitem = QListWidgetItem(self.listWidget)
+        __qlistwidgetitem.setIcon(icon);
+        icon1 = QIcon()
+        icon1.addFile(u":/black-icons/Data/imgs/black icons/icons8-male-user-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        __qlistwidgetitem1 = QListWidgetItem(self.listWidget)
+        __qlistwidgetitem1.setIcon(icon1);
+        icon2 = QIcon()
+        icon2.addFile(u":/black-icons/Data/imgs/black icons/icons8-chat-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        __qlistwidgetitem2 = QListWidgetItem(self.listWidget)
+        __qlistwidgetitem2.setIcon(icon2);
         self.listWidget.setObjectName(u"listWidget")
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
@@ -74,6 +86,8 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.listWidget.setLineWidth(1)
+        self.listWidget.setMidLineWidth(0)
+        self.listWidget.setIconSize(QSize(33, 33))
         self.listWidget.setFlow(QListView.TopToBottom)
         self.listWidget.setProperty("isWrapping", False)
         self.listWidget.setResizeMode(QListView.Fixed)
@@ -88,7 +102,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_6.addWidget(self.listWidget)
 
-        self.container_tabwid = QTabWidget(self.centralwidget)
+        self.container_tabwid = QTabWidget(self.mainwindow_frame)
         self.container_tabwid.setObjectName(u"container_tabwid")
         self.container_tabwid.setStyleSheet(u"")
         self.container_tabwid.setTabPosition(QTabWidget.North)
@@ -155,25 +169,32 @@ class Ui_MainWindow(object):
         self.addAccount_btn = QPushButton(self.frame)
         self.addAccount_btn.setObjectName(u"addAccount_btn")
         self.addAccount_btn.setStyleSheet(u"padding:10px 0")
+        icon3 = QIcon()
+        icon3.addFile(u":/black-icons/Data/imgs/black icons/icons8-add-administrator-100.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.addAccount_btn.setIcon(icon3)
+        self.addAccount_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_11.addWidget(self.addAccount_btn)
 
         self.removeAccount_btn = QPushButton(self.frame)
         self.removeAccount_btn.setObjectName(u"removeAccount_btn")
         self.removeAccount_btn.setStyleSheet(u"padding:10px 0")
+        icon4 = QIcon()
+        icon4.addFile(u":/black-icons/Data/imgs/black icons/icons8-remove-administrator-100.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.removeAccount_btn.setIcon(icon4)
+        self.removeAccount_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_11.addWidget(self.removeAccount_btn)
 
 
         self.verticalLayout_16.addWidget(self.frame)
 
-        icon = QIcon()
-        icon.addFile(u":/black-icons/Data/imgs/black icons/icons8-male-user-500.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.tabWidget.addTab(self.accounts, icon, "")
+        self.tabWidget.addTab(self.accounts, icon1, "")
         self.main = QWidget()
         self.main.setObjectName(u"main")
         self.verticalLayout_7 = QVBoxLayout(self.main)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.verticalLayout_7.setContentsMargins(-1, 20, -1, -1)
         self.groupBox_3 = QGroupBox(self.main)
         self.groupBox_3.setObjectName(u"groupBox_3")
         sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
@@ -353,7 +374,7 @@ class Ui_MainWindow(object):
         sizePolicy5.setVerticalStretch(0)
         sizePolicy5.setHeightForWidth(self.message_text.sizePolicy().hasHeightForWidth())
         self.message_text.setSizePolicy(sizePolicy5)
-        self.message_text.setMaximumSize(QSize(16777215, 60))
+        self.message_text.setMaximumSize(QSize(16777215, 16777215))
 
         self.verticalLayout_6.addWidget(self.message_text)
 
@@ -361,9 +382,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.addWidget(self.groupBox_5)
 
         self.verticalLayout_7.setStretch(3, 1)
-        icon1 = QIcon()
-        icon1.addFile(u":/black-icons/Data/imgs/black icons/icons8-home-500.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.tabWidget.addTab(self.main, icon1, "")
+        icon5 = QIcon()
+        icon5.addFile(u":/black-icons/Data/imgs/black icons/icons8-home-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.tabWidget.addTab(self.main, icon5, "")
         self.report = QWidget()
         self.report.setObjectName(u"report")
         self.verticalLayout_2 = QVBoxLayout(self.report)
@@ -371,25 +392,25 @@ class Ui_MainWindow(object):
         self.tableWidget = QTableWidget(self.report)
         if (self.tableWidget.columnCount() < 4):
             self.tableWidget.setColumnCount(4)
-        icon2 = QIcon()
-        icon2.addFile(u":/black-icons/Data/imgs/black icons/icons8-contacts-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon6 = QIcon()
+        icon6.addFile(u":/black-icons/Data/imgs/black icons/icons8-contacts-500.png", QSize(), QIcon.Normal, QIcon.Off)
         __qtablewidgetitem = QTableWidgetItem()
-        __qtablewidgetitem.setIcon(icon2);
+        __qtablewidgetitem.setIcon(icon6);
         self.tableWidget.setHorizontalHeaderItem(0, __qtablewidgetitem)
-        icon3 = QIcon()
-        icon3.addFile(u":/black-icons/Data/imgs/black icons/icons8-circled-right-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon7 = QIcon()
+        icon7.addFile(u":/black-icons/Data/imgs/black icons/icons8-circled-right-500.png", QSize(), QIcon.Normal, QIcon.Off)
         __qtablewidgetitem1 = QTableWidgetItem()
-        __qtablewidgetitem1.setIcon(icon3);
+        __qtablewidgetitem1.setIcon(icon7);
         self.tableWidget.setHorizontalHeaderItem(1, __qtablewidgetitem1)
-        icon4 = QIcon()
-        icon4.addFile(u":/black-icons/Data/imgs/black icons/icons8-call-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon8 = QIcon()
+        icon8.addFile(u":/black-icons/Data/imgs/black icons/icons8-call-500.png", QSize(), QIcon.Normal, QIcon.Off)
         __qtablewidgetitem2 = QTableWidgetItem()
-        __qtablewidgetitem2.setIcon(icon4);
+        __qtablewidgetitem2.setIcon(icon8);
         self.tableWidget.setHorizontalHeaderItem(2, __qtablewidgetitem2)
-        icon5 = QIcon()
-        icon5.addFile(u":/black-icons/Data/imgs/black icons/icons8-info-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon9 = QIcon()
+        icon9.addFile(u":/black-icons/Data/imgs/black icons/icons8-info-500.png", QSize(), QIcon.Normal, QIcon.Off)
         __qtablewidgetitem3 = QTableWidgetItem()
-        __qtablewidgetitem3.setIcon(icon5);
+        __qtablewidgetitem3.setIcon(icon9);
         self.tableWidget.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         self.tableWidget.setObjectName(u"tableWidget")
         self.tableWidget.setMinimumSize(QSize(493, 0))
@@ -402,9 +423,9 @@ class Ui_MainWindow(object):
         self.sheet_btn = QPushButton(self.report)
         self.sheet_btn.setObjectName(u"sheet_btn")
         self.sheet_btn.setStyleSheet(u"padding:15px 0")
-        icon6 = QIcon()
-        icon6.addFile(u":/black-icons/Data/imgs/black icons/icons8-hospital-500.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.sheet_btn.setIcon(icon6)
+        icon10 = QIcon()
+        icon10.addFile(u":/black-icons/Data/imgs/black icons/icons8-hospital-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.sheet_btn.setIcon(icon10)
         self.sheet_btn.setIconSize(QSize(20, 20))
 
         self.verticalLayout_2.addWidget(self.sheet_btn)
@@ -414,15 +435,15 @@ class Ui_MainWindow(object):
         sizePolicy2.setHeightForWidth(self.newSession_btn.sizePolicy().hasHeightForWidth())
         self.newSession_btn.setSizePolicy(sizePolicy2)
         self.newSession_btn.setStyleSheet(u"padding:10px 20px")
-        icon7 = QIcon()
-        icon7.addFile(u":/black-icons/Data/imgs/black icons/icons8-trash-can-500.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.newSession_btn.setIcon(icon7)
+        icon11 = QIcon()
+        icon11.addFile(u":/black-icons/Data/imgs/black icons/icons8-trash-can-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.newSession_btn.setIcon(icon11)
 
         self.verticalLayout_2.addWidget(self.newSession_btn, 0, Qt.AlignHCenter)
 
-        icon8 = QIcon()
-        icon8.addFile(u":/black-icons/Data/imgs/black icons/icons8-combo-chart-500.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.tabWidget.addTab(self.report, icon8, "")
+        icon12 = QIcon()
+        icon12.addFile(u":/black-icons/Data/imgs/black icons/icons8-combo-chart-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.tabWidget.addTab(self.report, icon12, "")
         self.about = QWidget()
         self.about.setObjectName(u"about")
         self.verticalLayout_8 = QVBoxLayout(self.about)
@@ -457,9 +478,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_8.addLayout(self.verticalLayout_10)
 
-        icon9 = QIcon()
-        icon9.addFile(u":/black-icons/Data/imgs/black icons/icons8-about-500.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.tabWidget.addTab(self.about, icon9, "")
+        icon13 = QIcon()
+        icon13.addFile(u":/black-icons/Data/imgs/black icons/icons8-about-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.tabWidget.addTab(self.about, icon13, "")
 
         self.verticalLayout_9.addWidget(self.tabWidget)
 
@@ -473,9 +494,9 @@ class Ui_MainWindow(object):
         self.start_btn = QPushButton(self.horizontalFrame)
         self.start_btn.setObjectName(u"start_btn")
         self.start_btn.setMaximumSize(QSize(16777215, 45))
-        icon10 = QIcon()
-        icon10.addFile(u":/black-icons/Data/imgs/black icons/icons8-play-500.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.start_btn.setIcon(icon10)
+        icon14 = QIcon()
+        icon14.addFile(u":/black-icons/Data/imgs/black icons/icons8-play-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.start_btn.setIcon(icon14)
         self.start_btn.setIconSize(QSize(34, 48))
 
         self.horizontalLayout_10.addWidget(self.start_btn)
@@ -483,9 +504,9 @@ class Ui_MainWindow(object):
         self.stop_btn = QPushButton(self.horizontalFrame)
         self.stop_btn.setObjectName(u"stop_btn")
         self.stop_btn.setMaximumSize(QSize(16777215, 45))
-        icon11 = QIcon()
-        icon11.addFile(u":/black-icons/Data/imgs/black icons/icons8-stop-500.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.stop_btn.setIcon(icon11)
+        icon15 = QIcon()
+        icon15.addFile(u":/black-icons/Data/imgs/black icons/icons8-stop-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.stop_btn.setIcon(icon15)
         self.stop_btn.setIconSize(QSize(38, 37))
 
         self.horizontalLayout_10.addWidget(self.stop_btn)
@@ -542,7 +563,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_11 = QVBoxLayout(self.main_2)
         self.verticalLayout_11.setSpacing(0)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.verticalLayout_11.setContentsMargins(-1, 12, -1, 0)
+        self.verticalLayout_11.setContentsMargins(-1, 30, -1, 0)
         self.groupBox_6 = QGroupBox(self.main_2)
         self.groupBox_6.setObjectName(u"groupBox_6")
         sizePolicy1.setHeightForWidth(self.groupBox_6.sizePolicy().hasHeightForWidth())
@@ -577,14 +598,22 @@ class Ui_MainWindow(object):
 
         self.groupBox_2 = QGroupBox(self.main_2)
         self.groupBox_2.setObjectName(u"groupBox_2")
+        sizePolicy6 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.groupBox_2.sizePolicy().hasHeightForWidth())
+        self.groupBox_2.setSizePolicy(sizePolicy6)
         self.groupBox_2.setFont(font1)
         self.groupBox_2.setAlignment(Qt.AlignCenter)
         self.horizontalLayout_4 = QHBoxLayout(self.groupBox_2)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.groupBox_11 = QGroupBox(self.groupBox_2)
         self.groupBox_11.setObjectName(u"groupBox_11")
-        sizePolicy3.setHeightForWidth(self.groupBox_11.sizePolicy().hasHeightForWidth())
-        self.groupBox_11.setSizePolicy(sizePolicy3)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Maximum)
+        sizePolicy7.setHorizontalStretch(0)
+        sizePolicy7.setVerticalStretch(0)
+        sizePolicy7.setHeightForWidth(self.groupBox_11.sizePolicy().hasHeightForWidth())
+        self.groupBox_11.setSizePolicy(sizePolicy7)
         self.verticalLayout_4 = QVBoxLayout(self.groupBox_11)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.textFirst_rb_2 = QRadioButton(self.groupBox_11)
@@ -638,42 +667,52 @@ class Ui_MainWindow(object):
 
         self.groupBox_8 = QGroupBox(self.main_2)
         self.groupBox_8.setObjectName(u"groupBox_8")
-        sizePolicy1.setHeightForWidth(self.groupBox_8.sizePolicy().hasHeightForWidth())
-        self.groupBox_8.setSizePolicy(sizePolicy1)
+        sizePolicy4.setHeightForWidth(self.groupBox_8.sizePolicy().hasHeightForWidth())
+        self.groupBox_8.setSizePolicy(sizePolicy4)
         self.groupBox_8.setMaximumSize(QSize(16777215, 16777215))
         self.groupBox_8.setFont(font1)
         self.groupBox_8.setAlignment(Qt.AlignCenter)
         self.verticalLayout_12 = QVBoxLayout(self.groupBox_8)
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
         self.verticalLayout_12.setContentsMargins(-1, 5, -1, 5)
-        self.horizontalLayout_9 = QHBoxLayout()
+        self.widget = QWidget(self.groupBox_8)
+        self.widget.setObjectName(u"widget")
+        sizePolicy6.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
+        self.widget.setSizePolicy(sizePolicy6)
+        self.horizontalLayout_9 = QHBoxLayout(self.widget)
         self.horizontalLayout_9.setSpacing(5)
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.horizontalLayout_9.setContentsMargins(0, 0, -1, -1)
-        self.pushButton_2 = QPushButton(self.groupBox_8)
+        self.horizontalLayout_9.setContentsMargins(1, 1, -1, -1)
+        self.pushButton_2 = QPushButton(self.widget)
         self.pushButton_2.setObjectName(u"pushButton_2")
 
         self.horizontalLayout_9.addWidget(self.pushButton_2)
 
-        self.append_newmessage_2 = QPushButton(self.groupBox_8)
+        self.append_newmessage_2 = QPushButton(self.widget)
         self.append_newmessage_2.setObjectName(u"append_newmessage_2")
 
         self.horizontalLayout_9.addWidget(self.append_newmessage_2)
 
 
-        self.verticalLayout_12.addLayout(self.horizontalLayout_9)
+        self.verticalLayout_12.addWidget(self.widget)
 
         self.message_text_2 = QPlainTextEdit(self.groupBox_8)
         self.message_text_2.setObjectName(u"message_text_2")
-        self.message_text_2.setMaximumSize(QSize(16777215, 60))
+        sizePolicy8 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy8.setHorizontalStretch(0)
+        sizePolicy8.setVerticalStretch(0)
+        sizePolicy8.setHeightForWidth(self.message_text_2.sizePolicy().hasHeightForWidth())
+        self.message_text_2.setSizePolicy(sizePolicy8)
+        self.message_text_2.setMaximumSize(QSize(16777215, 16777215))
 
         self.verticalLayout_12.addWidget(self.message_text_2)
 
+        self.verticalLayout_12.setStretch(1, 1)
 
         self.verticalLayout_11.addWidget(self.groupBox_8)
 
-        self.verticalLayout_11.setStretch(3, 1)
-        self.tabWidget_2.addTab(self.main_2, icon1, "")
+        self.verticalLayout_11.setStretch(3, 2)
+        self.tabWidget_2.addTab(self.main_2, icon5, "")
         self.report_2 = QWidget()
         self.report_2.setObjectName(u"report_2")
         self.verticalLayout_5 = QVBoxLayout(self.report_2)
@@ -682,15 +721,15 @@ class Ui_MainWindow(object):
         if (self.tableWidget_2.columnCount() < 3):
             self.tableWidget_2.setColumnCount(3)
         __qtablewidgetitem4 = QTableWidgetItem()
-        __qtablewidgetitem4.setIcon(icon2);
+        __qtablewidgetitem4.setIcon(icon6);
         self.tableWidget_2.setHorizontalHeaderItem(0, __qtablewidgetitem4)
-        icon12 = QIcon()
-        icon12.addFile(u":/black-icons/Data/imgs/black icons/icons8-phone-500.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon16 = QIcon()
+        icon16.addFile(u":/black-icons/Data/imgs/black icons/icons8-phone-500.png", QSize(), QIcon.Normal, QIcon.Off)
         __qtablewidgetitem5 = QTableWidgetItem()
-        __qtablewidgetitem5.setIcon(icon12);
+        __qtablewidgetitem5.setIcon(icon16);
         self.tableWidget_2.setHorizontalHeaderItem(1, __qtablewidgetitem5)
         __qtablewidgetitem6 = QTableWidgetItem()
-        __qtablewidgetitem6.setIcon(icon5);
+        __qtablewidgetitem6.setIcon(icon9);
         self.tableWidget_2.setHorizontalHeaderItem(2, __qtablewidgetitem6)
         self.tableWidget_2.setObjectName(u"tableWidget_2")
         self.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -707,7 +746,7 @@ class Ui_MainWindow(object):
         self.sheet_btn_2 = QPushButton(self.report_2)
         self.sheet_btn_2.setObjectName(u"sheet_btn_2")
         self.sheet_btn_2.setStyleSheet(u"padding:15px 0")
-        self.sheet_btn_2.setIcon(icon6)
+        self.sheet_btn_2.setIcon(icon10)
         self.sheet_btn_2.setIconSize(QSize(20, 20))
 
         self.verticalLayout_5.addWidget(self.sheet_btn_2)
@@ -717,11 +756,11 @@ class Ui_MainWindow(object):
         sizePolicy2.setHeightForWidth(self.newSession_btn_2.sizePolicy().hasHeightForWidth())
         self.newSession_btn_2.setSizePolicy(sizePolicy2)
         self.newSession_btn_2.setStyleSheet(u"padding:10px 20px")
-        self.newSession_btn_2.setIcon(icon7)
+        self.newSession_btn_2.setIcon(icon11)
 
         self.verticalLayout_5.addWidget(self.newSession_btn_2, 0, Qt.AlignHCenter)
 
-        self.tabWidget_2.addTab(self.report_2, icon8, "")
+        self.tabWidget_2.addTab(self.report_2, icon12, "")
         self.about_2 = QWidget()
         self.about_2.setObjectName(u"about_2")
         self.verticalLayout_13 = QVBoxLayout(self.about_2)
@@ -754,7 +793,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_13.addLayout(self.verticalLayout_14)
 
-        self.tabWidget_2.addTab(self.about_2, icon9, "")
+        self.tabWidget_2.addTab(self.about_2, icon13, "")
 
         self.verticalLayout_15.addWidget(self.tabWidget_2)
 
@@ -768,7 +807,7 @@ class Ui_MainWindow(object):
         self.start_btn_2 = QPushButton(self.horizontalFrame_2)
         self.start_btn_2.setObjectName(u"start_btn_2")
         self.start_btn_2.setMaximumSize(QSize(16777215, 45))
-        self.start_btn_2.setIcon(icon10)
+        self.start_btn_2.setIcon(icon14)
         self.start_btn_2.setIconSize(QSize(34, 48))
 
         self.horizontalLayout_15.addWidget(self.start_btn_2)
@@ -776,7 +815,7 @@ class Ui_MainWindow(object):
         self.stop_btn_2 = QPushButton(self.horizontalFrame_2)
         self.stop_btn_2.setObjectName(u"stop_btn_2")
         self.stop_btn_2.setMaximumSize(QSize(16777215, 45))
-        self.stop_btn_2.setIcon(icon11)
+        self.stop_btn_2.setIcon(icon15)
         self.stop_btn_2.setIconSize(QSize(38, 37))
 
         self.horizontalLayout_15.addWidget(self.stop_btn_2)
@@ -785,11 +824,256 @@ class Ui_MainWindow(object):
         self.verticalLayout_15.addWidget(self.horizontalFrame_2, 0, Qt.AlignHCenter)
 
         self.container_tabwid.addTab(self.familiar, "")
+        self.groups = QWidget()
+        self.groups.setObjectName(u"groups")
+        self.verticalLayout_24 = QVBoxLayout(self.groups)
+        self.verticalLayout_24.setObjectName(u"verticalLayout_24")
+        self.verticalLayout_18 = QVBoxLayout()
+        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
+        self.verticalLayout_18.setContentsMargins(-1, -1, -1, 0)
+        self.connect_inputs = QFrame(self.groups)
+        self.connect_inputs.setObjectName(u"connect_inputs")
+        sizePolicy6.setHeightForWidth(self.connect_inputs.sizePolicy().hasHeightForWidth())
+        self.connect_inputs.setSizePolicy(sizePolicy6)
+        self.horizontalLayout_14 = QHBoxLayout(self.connect_inputs)
+        self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
+        self.frame_5 = QFrame(self.connect_inputs)
+        self.frame_5.setObjectName(u"frame_5")
+        sizePolicy9 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        sizePolicy9.setHorizontalStretch(0)
+        sizePolicy9.setVerticalStretch(0)
+        sizePolicy9.setHeightForWidth(self.frame_5.sizePolicy().hasHeightForWidth())
+        self.frame_5.setSizePolicy(sizePolicy9)
+        self.verticalLayout_21 = QVBoxLayout(self.frame_5)
+        self.verticalLayout_21.setObjectName(u"verticalLayout_21")
+        self.label_5 = QLabel(self.frame_5)
+        self.label_5.setObjectName(u"label_5")
+
+        self.verticalLayout_21.addWidget(self.label_5)
+
+        self.phone_le = QLineEdit(self.frame_5)
+        self.phone_le.setObjectName(u"phone_le")
+
+        self.verticalLayout_21.addWidget(self.phone_le)
+
+
+        self.horizontalLayout_14.addWidget(self.frame_5)
+
+        self.frame_2 = QFrame(self.connect_inputs)
+        self.frame_2.setObjectName(u"frame_2")
+        sizePolicy9.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
+        self.frame_2.setSizePolicy(sizePolicy9)
+        self.verticalLayout_19 = QVBoxLayout(self.frame_2)
+        self.verticalLayout_19.setObjectName(u"verticalLayout_19")
+        self.label_2 = QLabel(self.frame_2)
+        self.label_2.setObjectName(u"label_2")
+
+        self.verticalLayout_19.addWidget(self.label_2)
+
+        self.api_id_le = QLineEdit(self.frame_2)
+        self.api_id_le.setObjectName(u"api_id_le")
+
+        self.verticalLayout_19.addWidget(self.api_id_le)
+
+
+        self.horizontalLayout_14.addWidget(self.frame_2)
+
+        self.frame_3 = QFrame(self.connect_inputs)
+        self.frame_3.setObjectName(u"frame_3")
+        sizePolicy6.setHeightForWidth(self.frame_3.sizePolicy().hasHeightForWidth())
+        self.frame_3.setSizePolicy(sizePolicy6)
+        self.verticalLayout_20 = QVBoxLayout(self.frame_3)
+        self.verticalLayout_20.setObjectName(u"verticalLayout_20")
+        self.label_3 = QLabel(self.frame_3)
+        self.label_3.setObjectName(u"label_3")
+
+        self.verticalLayout_20.addWidget(self.label_3)
+
+        self.api_hash_le = QLineEdit(self.frame_3)
+        self.api_hash_le.setObjectName(u"api_hash_le")
+
+        self.verticalLayout_20.addWidget(self.api_hash_le)
+
+
+        self.horizontalLayout_14.addWidget(self.frame_3)
+
+
+        self.verticalLayout_18.addWidget(self.connect_inputs)
+
+        self.label = QLabel(self.groups)
+        self.label.setObjectName(u"label")
+
+        self.verticalLayout_18.addWidget(self.label, 0, Qt.AlignHCenter)
+
+        self.telegram_link = QCommandLinkButton(self.groups)
+        self.telegram_link.setObjectName(u"telegram_link")
+        font3 = QFont()
+        font3.setUnderline(True)
+        self.telegram_link.setFont(font3)
+        self.telegram_link.setCursor(QCursor(Qt.PointingHandCursor))
+        self.telegram_link.setStyleSheet(u"\n"
+"background: transparent;\n"
+"border:0;\n"
+"font-size:12px\n"
+"\n"
+"")
+        self.telegram_link.setIconSize(QSize(0, 0))
+
+        self.verticalLayout_18.addWidget(self.telegram_link, 0, Qt.AlignHCenter)
+
+        self.frame2 = QFrame(self.groups)
+        self.frame2.setObjectName(u"frame2")
+        sizePolicy6.setHeightForWidth(self.frame2.sizePolicy().hasHeightForWidth())
+        self.frame2.setSizePolicy(sizePolicy6)
+        self.verticalLayout_22 = QVBoxLayout(self.frame2)
+        self.verticalLayout_22.setObjectName(u"verticalLayout_22")
+        self.frame_6 = QFrame(self.frame2)
+        self.frame_6.setObjectName(u"frame_6")
+        sizePolicy3.setHeightForWidth(self.frame_6.sizePolicy().hasHeightForWidth())
+        self.frame_6.setSizePolicy(sizePolicy3)
+        self.frame_6.setStyleSheet(u"padding:10px 20px")
+        self.horizontalLayout_17 = QHBoxLayout(self.frame_6)
+        self.horizontalLayout_17.setSpacing(0)
+        self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
+        self.horizontalLayout_17.setContentsMargins(0, 0, 0, 0)
+        self.connect_btn = QPushButton(self.frame_6)
+        self.connect_btn.setObjectName(u"connect_btn")
+        sizePolicy4.setHeightForWidth(self.connect_btn.sizePolicy().hasHeightForWidth())
+        self.connect_btn.setSizePolicy(sizePolicy4)
+        self.connect_btn.setStyleSheet(u"")
+
+        self.horizontalLayout_17.addWidget(self.connect_btn)
+
+
+        self.verticalLayout_22.addWidget(self.frame_6, 0, Qt.AlignHCenter)
+
+        self.widget_4 = QWidget(self.frame2)
+        self.widget_4.setObjectName(u"widget_4")
+        sizePolicy10 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Preferred)
+        sizePolicy10.setHorizontalStretch(0)
+        sizePolicy10.setVerticalStretch(0)
+        sizePolicy10.setHeightForWidth(self.widget_4.sizePolicy().hasHeightForWidth())
+        self.widget_4.setSizePolicy(sizePolicy10)
+        self.horizontalLayout_12 = QHBoxLayout(self.widget_4)
+        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
+        self.label_4 = QLabel(self.widget_4)
+        self.label_4.setObjectName(u"label_4")
+
+        self.horizontalLayout_12.addWidget(self.label_4)
+
+        self.confirm_code_le = QLineEdit(self.widget_4)
+        self.confirm_code_le.setObjectName(u"confirm_code_le")
+
+        self.horizontalLayout_12.addWidget(self.confirm_code_le)
+
+        self.confirm_code_btn = QPushButton(self.widget_4)
+        self.confirm_code_btn.setObjectName(u"confirm_code_btn")
+
+        self.horizontalLayout_12.addWidget(self.confirm_code_btn)
+
+
+        self.verticalLayout_22.addWidget(self.widget_4, 0, Qt.AlignHCenter)
+
+
+        self.verticalLayout_18.addWidget(self.frame2)
+
+        self.line = QFrame(self.groups)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_18.addWidget(self.line)
+
+        self.groupBox_12 = QGroupBox(self.groups)
+        self.groupBox_12.setObjectName(u"groupBox_12")
+        sizePolicy4.setHeightForWidth(self.groupBox_12.sizePolicy().hasHeightForWidth())
+        self.groupBox_12.setSizePolicy(sizePolicy4)
+        self.verticalLayout_23 = QVBoxLayout(self.groupBox_12)
+        self.verticalLayout_23.setSpacing(0)
+        self.verticalLayout_23.setObjectName(u"verticalLayout_23")
+        self.verticalLayout_23.setContentsMargins(0, 0, 0, 0)
+        self.listWidget_2 = QListWidget(self.groupBox_12)
+        self.listWidget_2.setObjectName(u"listWidget_2")
+        sizePolicy5.setHeightForWidth(self.listWidget_2.sizePolicy().hasHeightForWidth())
+        self.listWidget_2.setSizePolicy(sizePolicy5)
+
+        self.verticalLayout_23.addWidget(self.listWidget_2)
+
+        self.refresh_groups_btn = QPushButton(self.groupBox_12)
+        self.refresh_groups_btn.setObjectName(u"refresh_groups_btn")
+        sizePolicy11 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+        sizePolicy11.setHorizontalStretch(0)
+        sizePolicy11.setVerticalStretch(0)
+        sizePolicy11.setHeightForWidth(self.refresh_groups_btn.sizePolicy().hasHeightForWidth())
+        self.refresh_groups_btn.setSizePolicy(sizePolicy11)
+
+        self.verticalLayout_23.addWidget(self.refresh_groups_btn, 0, Qt.AlignHCenter)
+
+        self.horizontalWidget = QWidget(self.groupBox_12)
+        self.horizontalWidget.setObjectName(u"horizontalWidget")
+        sizePolicy10.setHeightForWidth(self.horizontalWidget.sizePolicy().hasHeightForWidth())
+        self.horizontalWidget.setSizePolicy(sizePolicy10)
+        self.horizontalLayout_19 = QHBoxLayout(self.horizontalWidget)
+        self.horizontalLayout_19.setSpacing(0)
+        self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
+        self.horizontalLayout_19.setContentsMargins(0, 0, 0, 0)
+
+        self.verticalLayout_23.addWidget(self.horizontalWidget, 0, Qt.AlignHCenter)
+
+        self.groupBox1 = QGroupBox(self.groupBox_12)
+        self.groupBox1.setObjectName(u"groupBox1")
+        self.horizontalLayout_18 = QHBoxLayout(self.groupBox1)
+        self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
+        self.output_le = QLineEdit(self.groupBox1)
+        self.output_le.setObjectName(u"output_le")
+
+        self.horizontalLayout_18.addWidget(self.output_le)
+
+        self.output_btn = QToolButton(self.groupBox1)
+        self.output_btn.setObjectName(u"output_btn")
+
+        self.horizontalLayout_18.addWidget(self.output_btn)
+
+
+        self.verticalLayout_23.addWidget(self.groupBox1)
+
+        self.verticalLayout_23.setStretch(2, 2)
+
+        self.verticalLayout_18.addWidget(self.groupBox_12)
+
+        self.spinner = QLabel(self.groups)
+        self.spinner.setObjectName(u"spinner")
+
+        self.verticalLayout_18.addWidget(self.spinner, 0, Qt.AlignHCenter)
+
+        self.verticalWidget = QWidget(self.groups)
+        self.verticalWidget.setObjectName(u"verticalWidget")
+        sizePolicy10.setHeightForWidth(self.verticalWidget.sizePolicy().hasHeightForWidth())
+        self.verticalWidget.setSizePolicy(sizePolicy10)
+        self.verticalWidget.setStyleSheet(u"padding:15px 30px")
+        self.verticalLayout_25 = QVBoxLayout(self.verticalWidget)
+        self.verticalLayout_25.setObjectName(u"verticalLayout_25")
+        self.verticalLayout_25.setContentsMargins(-1, -1, -1, 0)
+        self.extract_btn = QPushButton(self.verticalWidget)
+        self.extract_btn.setObjectName(u"extract_btn")
+        sizePolicy9.setHeightForWidth(self.extract_btn.sizePolicy().hasHeightForWidth())
+        self.extract_btn.setSizePolicy(sizePolicy9)
+
+        self.verticalLayout_25.addWidget(self.extract_btn)
+
+
+        self.verticalLayout_18.addWidget(self.verticalWidget, 0, Qt.AlignHCenter)
+
+        self.verticalLayout_18.setStretch(4, 1)
+
+        self.verticalLayout_24.addLayout(self.verticalLayout_18)
+
+        self.container_tabwid.addTab(self.groups, "")
 
         self.horizontalLayout_6.addWidget(self.container_tabwid)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_6)
+        self.verticalLayout.addWidget(self.mainwindow_frame)
 
         self.license_frame = QFrame(self.centralwidget)
         self.license_frame.setObjectName(u"license_frame")
@@ -806,6 +1090,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_25.setContentsMargins(-1, 0, -1, -1)
         self.license_le = QLineEdit(self.license_frame)
         self.license_le.setObjectName(u"license_le")
+        sizePolicy12 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy12.setHorizontalStretch(0)
+        sizePolicy12.setVerticalStretch(0)
+        sizePolicy12.setHeightForWidth(self.license_le.sizePolicy().hasHeightForWidth())
+        self.license_le.setSizePolicy(sizePolicy12)
+        self.license_le.setMinimumSize(QSize(400, 0))
         self.license_le.setStyleSheet(u"padding:7px;\n"
 "font-size:14px")
 
@@ -813,6 +1103,8 @@ class Ui_MainWindow(object):
 
         self.license_btn = QPushButton(self.license_frame)
         self.license_btn.setObjectName(u"license_btn")
+        sizePolicy2.setHeightForWidth(self.license_btn.sizePolicy().hasHeightForWidth())
+        self.license_btn.setSizePolicy(sizePolicy2)
         self.license_btn.setStyleSheet(u"padding:8px;\n"
 "font-weight:bold")
 
@@ -827,6 +1119,7 @@ class Ui_MainWindow(object):
         self.license_status_label.setSizePolicy(sizePolicy4)
         self.license_status_label.setMinimumSize(QSize(0, 100))
         self.license_status_label.setMaximumSize(QSize(16777215, 100))
+        self.license_status_label.setFocusPolicy(Qt.NoFocus)
         self.license_status_label.setStyleSheet(u"color:#e63c41;\n"
 "font-weight:bold;\n"
 "border:none;\n"
@@ -837,12 +1130,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.license_frame)
 
-        self.frame2 = QFrame(self.centralwidget)
-        self.frame2.setObjectName(u"frame2")
-        self.horizontalLayout_13 = QHBoxLayout(self.frame2)
+        self.frame3 = QFrame(self.centralwidget)
+        self.frame3.setObjectName(u"frame3")
+        self.horizontalLayout_13 = QHBoxLayout(self.frame3)
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
         self.horizontalLayout_13.setContentsMargins(-1, 1, -1, -1)
-        self.commandLinkButton = QCommandLinkButton(self.frame2)
+        self.commandLinkButton = QCommandLinkButton(self.frame3)
         self.commandLinkButton.setObjectName(u"commandLinkButton")
         sizePolicy3.setHeightForWidth(self.commandLinkButton.sizePolicy().hasHeightForWidth())
         self.commandLinkButton.setSizePolicy(sizePolicy3)
@@ -851,19 +1144,19 @@ class Ui_MainWindow(object):
         self.commandLinkButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.commandLinkButton.setStyleSheet(u"background: transparent;\n"
 "border:0")
-        icon13 = QIcon()
+        icon17 = QIcon()
         iconThemeName = u";"
         if QIcon.hasThemeIcon(iconThemeName):
-            icon13 = QIcon.fromTheme(iconThemeName)
+            icon17 = QIcon.fromTheme(iconThemeName)
         else:
-            icon13.addFile(u"../Yellow Pages sg", QSize(), QIcon.Normal, QIcon.Off)
+            icon17.addFile(u"../Yellow Pages sg", QSize(), QIcon.Normal, QIcon.Off)
         
-        self.commandLinkButton.setIcon(icon13)
+        self.commandLinkButton.setIcon(icon17)
 
         self.horizontalLayout_13.addWidget(self.commandLinkButton, 0, Qt.AlignLeft)
 
 
-        self.verticalLayout.addWidget(self.frame2)
+        self.verticalLayout.addWidget(self.frame3)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
@@ -873,9 +1166,9 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.listWidget.currentRowChanged.connect(self.container_tabwid.setCurrentIndex)
 
-        self.listWidget.setCurrentRow(0)
+        self.listWidget.setCurrentRow(-1)
         self.container_tabwid.setCurrentIndex(1)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.tabWidget_2.setCurrentIndex(0)
 
 
@@ -891,10 +1184,12 @@ class Ui_MainWindow(object):
         ___qlistwidgetitem.setText(QCoreApplication.translate("MainWindow", u"Anonymous", None));
         ___qlistwidgetitem1 = self.listWidget.item(1)
         ___qlistwidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Familiar", None));
+        ___qlistwidgetitem2 = self.listWidget.item(2)
+        ___qlistwidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Groups", None));
         self.listWidget.setSortingEnabled(__sortingEnabled)
 
-        self.addAccount_btn.setText(QCoreApplication.translate("MainWindow", u"Add", None))
-        self.removeAccount_btn.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
+        self.addAccount_btn.setText("")
+        self.removeAccount_btn.setText("")
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.accounts), QCoreApplication.translate("MainWindow", u"Accounts", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"Sending Mode", None))
         self.phone_rb.setText(QCoreApplication.translate("MainWindow", u"Send By Phone Number", None))
@@ -999,8 +1294,23 @@ class Ui_MainWindow(object):
         self.start_btn_2.setText("")
         self.stop_btn_2.setText("")
         self.container_tabwid.setTabText(self.container_tabwid.indexOf(self.familiar), QCoreApplication.translate("MainWindow", u"Familiar", None))
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"Phone", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"API ID", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"API HASH", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Get API ID & Hash from this link", None))
+        self.telegram_link.setText(QCoreApplication.translate("MainWindow", u"http://my.telegram.org/", None))
+        self.connect_btn.setText(QCoreApplication.translate("MainWindow", u"Connect", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Enter The Code", None))
+        self.confirm_code_btn.setText(QCoreApplication.translate("MainWindow", u"Confirm", None))
+        self.groupBox_12.setTitle(QCoreApplication.translate("MainWindow", u"Choose a Group", None))
+        self.refresh_groups_btn.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
+        self.groupBox1.setTitle(QCoreApplication.translate("MainWindow", u"Export Location", None))
+        self.output_btn.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.spinner.setText("")
+        self.extract_btn.setText(QCoreApplication.translate("MainWindow", u"Extract Members", None))
+        self.container_tabwid.setTabText(self.container_tabwid.indexOf(self.groups), QCoreApplication.translate("MainWindow", u"groups", None))
         self.license_le.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Type your License key", None))
         self.license_btn.setText(QCoreApplication.translate("MainWindow", u"Activate", None))
-        self.commandLinkButton.setText(QCoreApplication.translate("MainWindow", u"\u00a9 Copyright 2020 LorDAhmeD", None))
+        self.commandLinkButton.setText(QCoreApplication.translate("MainWindow", u"\u00a9 Copyright 2021 LorDAhmeD", None))
     # retranslateUi
 

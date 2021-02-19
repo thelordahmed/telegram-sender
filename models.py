@@ -1,9 +1,17 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy import Column, String, Integer, ForeignKey, Text, DateTime
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
+import controller
 from controller import data_folder
 from platform import system
+
+try:
+    os.mkdir(os.path.join(controller.data_folder))
+    os.mkdir(os.path.join(controller.accountsFolder))
+except FileExistsError:
+    pass
 
 
 if system() == "Darwin":

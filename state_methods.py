@@ -12,6 +12,9 @@ class State:
         self.view.tabWidget.setCurrentIndex(0)
         self.view.stop_btn.setDisabled(True)
         self.view.stop_btn_2.setDisabled(True)
+        self.view.extract_btn.setDisabled(True)
+        # hiding confirm code frame
+        self.view.widget_4.hide()
 
     def start_state(self, mode):
         if mode == "anony":

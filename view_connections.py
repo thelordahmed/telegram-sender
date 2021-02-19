@@ -1,3 +1,4 @@
+from webbrowser import open
 
 class Connections:
     def __init__(self, view_obj, main_obj):
@@ -5,6 +6,12 @@ class Connections:
         self.main = main_obj
 
 
+        self.view.telegram_link.clicked.connect(lambda: open("http://my.telegram.org/"))
+        self.view.connect_btn.clicked.connect(self.main.connect_btn_func)
+        self.view.refresh_groups_btn.clicked.connect(self.main.connected_action)
+        self.view.confirm_code_btn.clicked.connect(self.main.confirm_btn_func)
+        self.view.output_btn.clicked.connect(lambda: self.view.output_le.setText(self.view.get_folder_path("choose the output folder")))
+        self.view.extract_btn.clicked.connect(self.main.extract_group)
         self.main.signals.ok_message.connect(self.view.ok_message)
         self.view.addAccount_btn.clicked.connect(self.main.get_inputDialog_value)
         self.view.removeAccount_btn.clicked.connect(self.main.remove_account)
@@ -32,3 +39,7 @@ class Connections:
         self.view.stop_btn_2.clicked.connect(lambda: self.main.stop_event("familiar"))
         self.view.newSession_btn.clicked.connect(lambda: self.main.newSession("anony"))
         self.view.newSession_btn_2.clicked.connect(lambda: self.main.newSession("familiar"))
+        self.view.license_btn.clicked.connect(lambda: self.main.license.validate(self.view.license_le.text()))
+        self.view.commandLinkButton.clicked.connect(self.view.copyrights)
+
+

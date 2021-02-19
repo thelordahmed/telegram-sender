@@ -7,17 +7,24 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
+from telethon.tl.functions.messages import GetDialogsRequest
+from telethon.tl.types import InputPeerEmpty, Channel, Chat
+
 from controller import browserData, accountsFolder
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-
 from selenium import webdriver
+from telethon.sync import TelegramClient
+import asyncio
+from telethon.errors.rpcerrorlist import PhoneCodeInvalidError
 
 # search with username
 # https://web.telegram.org/#/im?p=@USERNAME
 
 
 class Telegram:
+    client = None
+    groups = None
     _handle = None
     _window = None
     search_input = '//div[@class="im_dialogs_panel"]/div[@class="im_dialogs_search"]/input'
@@ -41,6 +48,11 @@ class Telegram:
     error_modal_okBtn = '//div[@class="error_modal_wrap md_simple_modal_wrap"]//button'
     # this will be visible if this is channel (unable to send)
     channel_div = '//div[@ng-switch-when="channel"]'
+    modal_close_btn = '//a[@class="md_modal_action md_modal_action_close"]'
+    # GROUP SECTION
+
+    phone_div = '//div[@ng-if="user.phone"]/div[1]'
+    username_div = '//div[@ng-if="user.username"]/div[1]'
 
     @classmethod
     def open(cls, account = browserData) -> object:
@@ -70,11 +82,25 @@ class Telegram:
         cls._handle = None
         cls._window.close()
 
+    @staticmethod
+    def validate_phone(number):
+        symbols = [" ", "-", "+", "/", "\\", "(", ")", "[", "]"]
+        for i in symbols:
+            number = number.replace(i, "")
+        return number
+
     @classmethod
     def search_phone(cls, number: str) -> None or False:
         """
         opens the contact chat - returns False if contact not foound
         """
+        # VALIDATING THE NUMBER
+        number = cls.validate_phone(number)
+        # CHECKING ON ANY OPENED MODAL BEFORE STARTING
+        try:
+            cls._window.find_element_by_xpath(cls.modal_close_btn).click()
+        except NoSuchElementException:
+            pass
         # CLICKING THE DROPDOWN BUTTON
         try:
             cls._window.find_element_by_xpath(cls.dropdown_btn).click()
@@ -98,6 +124,8 @@ class Telegram:
         # CHECKING FOR ERROR MESSAGE
         try:
             cls._window.find_element_by_xpath(cls.error_modal)
+            sleep(1)
+            cls._window.find_element_by_xpath(cls.error_modal_okBtn).click()
             return False
         except NoSuchElementException:
             pass
@@ -108,6 +136,7 @@ class Telegram:
         """
         opens the contact chat - returns False if contact not foound - or "channel" if it's a channel
         """
+        username = username.replace("@", "")
         # TRY OPENING THE USERNAME
         print("debug")
         cls._window.get(f"https://web.telegram.org/#/im?p=@{username}")
@@ -178,3 +207,71 @@ class Telegram:
     @classmethod
     def wait_for_connection(cls):
         WebDriverWait(cls._window, 3600).until(ec.invisibility_of_element_located((By.XPATH, cls.connectionLost_div)))
+
+
+    @classmethod
+    def api_client_connect(cls, phone, api_id, api_hash):
+        if "+" not in phone:
+            phone = "+" + phone
+        cls.client = TelegramClient(phone, api_id, api_hash)
+        cls.client.connect()
+        if not cls.client.is_user_authorized():
+            print("not authorized")
+            cls.client.send_code_request(phone)
+            return False
+        print("Authorized!")
+
+    @classmethod
+    def api_confirm_signin(cls, phone, code):
+        """
+        returns "invalid code" if confirmation code was wrong and false if something wrong happened
+        """
+        if "+" not in phone:
+            phone = "+" + phone
+        try:
+            cls.client.sign_in(phone, code)
+        except PhoneCodeInvalidError:
+            return "invalid code"
+        except:
+            return False
+
+    @classmethod
+    def api_extract_groups(cls):
+        chats = []
+        groups = []
+        last_date = None
+        chunk_size = 200
+
+        result = cls.client(GetDialogsRequest(
+            offset_date=last_date,
+            offset_id=0,
+            offset_peer=InputPeerEmpty(),
+            limit=chunk_size,
+            hash=0
+        ))
+
+        # print(result.stringify())
+
+        chats.extend(result.chats)
+
+        for chat in chats:
+            try:
+                if chat.__class__ == Channel or chat.__class__ == Chat:
+                    if chat.__class__ == Chat:
+                        if chat.deactivated is False and chat.left is False:
+                            groups.append(chat)
+                    else:
+                        groups.append(chat)
+
+            except:
+                continue
+
+        # for chat in chats:
+        #     try:
+        #         if chat.megagroup:
+        #             groups.append(chat)
+        #     except:
+        #         continue
+        cls.groups = groups
+
+

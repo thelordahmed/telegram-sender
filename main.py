@@ -1,10 +1,15 @@
+import asyncio
 import csv
+import json
+import platform
 import random
 import shutil
 from datetime import datetime, timedelta
 from PySide2 import QtCore
 from openpyxl import load_workbook
 from selenium.common.exceptions import TimeoutException
+from telethon.errors import ChannelPrivateError
+import threading
 import controller
 from PySide2.QtWidgets import QApplication
 from view import View
@@ -16,10 +21,13 @@ from view_connections import Connections
 from models import Account, Session, ContactsAnony, ContactsFamiliar
 from state_methods import State
 from ast import literal_eval
+import traceback
+from license_validation import License
 
 
 # todo - (Future update) load the contacts to the interface in another thread
-# todo - handle unknown errors
+# todo - (Future update) auto identifing sending by id or phone
+
 
 class Signals(QtCore.QObject):
     ok_message = QtCore.Signal(str, str)
@@ -27,17 +35,16 @@ class Signals(QtCore.QObject):
 
 class Main:
     def __init__(self):
-        api_url = "https://softwarekeys.herokuapps.com"
+        api_url = "https://softwarekeys.herokuapp.com"
         self.view = View(api_url)
         self.session = Session()
         self.state = State(self.view, self)
         self.signals = Signals()
+        self.license = License(api_url, "https://softwarekeys.herokuapp.com/download/telegram",
+                               self.view, "Telegram", controller.data_folder, self.view.mainwindow_frame, "Telegram Bulk Sender")
         # CHECK ON LAST WORKING MODE
         self.last_started = None    # "anony" | "familiar"
-        try:
-            os.mkdir(os.path.join(controller.accountsFolder))
-        except FileExistsError:
-            pass
+
         self.onAppStart_event()
         #################
         Connections(self.view, self)
@@ -46,6 +53,22 @@ class Main:
 
     def onAppStart_event(self):
         self.state.default_state()
+        # setting default output
+        if platform.system() == "Darwin":
+            path = os.path.join(os.path.expanduser("~"), "Desktop")
+        else:
+            path = os.path.join(os.environ["USERPROFILE"], "Desktop")
+        self.view.output_le.setText(path)
+        # loading user inputs if found (groups tab)
+        try:
+            with open(os.path.join(controller.data_folder, "groups_inputs.json")) as f:
+                data = json.loads(f.read())
+                self.view.phone_le.setText(data["phone"])
+                self.view.api_id_le.setText(data["api_id"])
+                self.view.api_hash_le.setText(data["api_hash"])
+                self.view.output_le.setText(data["output"])
+        except:
+            pass
         # loading accounts
         accounts = self.session.query(Account).all()
         for query in accounts:
@@ -70,6 +93,7 @@ class Main:
             self.view.addToTableWidget(data, self.view.tableWidget_2)
 
 
+
     def stop_event(self, mode):
         if mode == "anony":
             stop_btn = self.view.stop_btn
@@ -88,6 +112,92 @@ class Main:
         Thread(target=process_method).start()
         self.view.state = "started"
         self.state.start_state(mode)
+
+    def connect_btn_func(self):
+        phone = self.view.phone_le.text()
+        api_id = int(self.view.api_id_le.text())
+        api_hash = self.view.api_hash_le.text()
+        try:
+            if Telegram.api_client_connect(phone, api_id, api_hash) is False:
+                self.view.widget_4.show()
+                self.view.connect_btn.setDisabled(True)
+            else:
+                self.view.connect_btn.setDisabled(True)
+                self.connected_action()
+        except Exception as e:
+            print(e)
+            self.signals.ok_message.emit("Error", "Unable to connect!")
+
+    def confirm_btn_func(self):
+        code = self.view.confirm_code_le.text()
+        phone = self.view.phone_le.text()
+        res = Telegram.api_confirm_signin(phone, code)
+        if res == "invalid code":
+            self.signals.ok_message.emit("Error", "Invalid Code")
+            return False
+        elif res is False:
+            self.signals.ok_message.emit("Error", "Something Wrong Happened, Please Try Again")
+            return False
+        self.connected_action()
+
+    def connected_action(self):
+        # CONFIRMED & CONNECTED FEEDBACK
+        self.view.widget_4.hide()
+        self.view.connect_btn.setText("Connected Succssfully!")
+        self.view.connect_btn.setStyleSheet("border:0; color:green")
+        # LOAD GROUPS
+        Telegram.api_extract_groups()
+        groups_names = [group.title for group in Telegram.groups]
+        self.view.listWidget_2.clear()
+        self.view.addToListWidget(groups_names, self.view.listWidget_2)
+        self.view.extract_btn.setEnabled(True)
+        self.view.refresh_groups_btn.setEnabled(True)
+
+    def extract_group(self):
+        try:
+            # SAVING USER INPUTS
+            with open(os.path.join(controller.data_folder, "groups_inputs.json"), "w") as f:
+                data = {
+                    "phone": self.view.phone_le.text(),
+                    "api_id": self.view.api_id_le.text(),
+                    "api_hash": self.view.api_hash_le.text(),
+                    "output": self.view.output_le.text()
+                }
+                f.write(json.dumps(data))
+            selected_index = self.view.listWidget_2.currentRow()
+            target_group = Telegram.groups[selected_index]
+            all_members = Telegram.client.get_participants(target_group, aggressive=True)
+            print("passed it!!!")
+            # VALIDATING FILE NAME FOR WINDOWS
+            file_name = f"{target_group.title}'s members.csv"
+            windows_fobidden_symbols = [">", "<", "!", ":", "\"", "\\", "/", "*", "?", "|"]
+            for sym in windows_fobidden_symbols:
+                file_name = file_name.replace(sym, "")
+            csv_path = os.path.join(self.view.output_le.text(), file_name)
+            with open(csv_path, "w", encoding="UTF-8") as f:
+                writer = csv.writer(f, delimiter=",", lineterminator="\n")
+                writer.writerow(['Name', 'Username', 'Group'])
+                for user in all_members:
+                    if user.username:
+                        username = user.username
+                    else:
+                        username = ""
+                    if user.first_name:
+                        first_name = user.first_name
+                    else:
+                        first_name = ""
+                    if user.last_name:
+                        last_name = user.last_name
+                    else:
+                        last_name = ""
+                    name = (first_name + ' ' + last_name).strip()
+                    writer.writerow([name, username, target_group.title])
+        except ChannelPrivateError:
+            self.signals.ok_message.emit("Error", "You Don't have access to this group anymore!")
+
+        self.view.spinner.hide()
+        self.view.extract_btn.show()
+        self.signals.ok_message.emit("Done", "Members Extracted Successfully!")
 
 
     def get_inputDialog_value(self):
@@ -344,180 +454,191 @@ class Main:
 
 
     def process_anony(self):
-        # CHECK ON THE LAST MODE WAS WORKING TO CLOSE THE BROWSER IF SWITCHED TO ANOTHER
-        if self.last_started == "familiar":
-            Telegram.close()
-        self.last_started = "anony"
-        session = Session()
-        self.view.save_settings(session)
-        messages = self.view.messages_sb.value()
-        accounts = session.query(Account).all()
-        # TO CHECK LOOP BREAK REASON
-        loop_check = None  # "Working" | "Error" | "Account Limit" | "Stopped" | "Sending"
-        for acc in accounts:
-            # STOP BUTTON CHECK IF CLICKED
-            if self.view.state == "stop":
-                loop_check = "Stopped"
-                break
-            if acc.sentCounter >= messages:
-                # AVOIDING A BUG: CHECK IF THIS ACCOUNT HAS A sentDate OR NOT
-                if acc.sentDate is not None:
-                    if (datetime.utcnow() - acc.sentDate) > timedelta(hours=24):
-                        # RESET SENT COUNTER OF THE ACCOUNT
-                        acc.sentCounter = 0
+        try:
+            # CHECK ON THE LAST MODE WAS WORKING TO CLOSE THE BROWSER IF SWITCHED TO ANOTHER
+            if self.last_started == "familiar":
+                Telegram.close()
+            self.last_started = "anony"
+            session = Session()
+            self.view.save_settings(session)
+            messages = self.view.messages_sb.value()
+            accounts = session.query(Account).all()
+            # TO CHECK LOOP BREAK REASON
+            loop_check = None  # "Working" | "Error" | "Account Limit" | "Stopped" | "Sending"
+            for acc in accounts:
+                # STOP BUTTON CHECK IF CLICKED
+                if self.view.state == "stop":
+                    loop_check = "Stopped"
+                    break
+                if acc.sentCounter >= messages:
+                    # AVOIDING A BUG: CHECK IF THIS ACCOUNT HAS A sentDate OR NOT
+                    if acc.sentDate is not None:
+                        if (datetime.utcnow() - acc.sentDate) > timedelta(hours=24):
+                            # RESET SENT COUNTER OF THE ACCOUNT
+                            acc.sentCounter = 0
+                            session.commit()
+                        else:
+                            # SKIP TO NEXT ACCOUNT
+                            continue
+                # TO CHECK LOOP BREAK REASON -> TO DETRMINE WHICH MESSAGE TO SHOW WHEN FINISH
+                loop_check = "Working"
+                # OPEN THE ACCOUNT BROWSER WINDOW
+                Telegram.open(acc.name)
+                # GET CONTACTS WITH STATUS "--"
+                contacts = session.query(ContactsAnony).filter_by(status="--").all()
+                # CONTACTS LOOP
+                for contact in contacts:
+                    # TO DETRMINE WHICH MESSAGE TO SHOW WHEN FINISH
+                    loop_check = "Sending"
+                    # STOP BUTTON CHECK IF CLICKED
+                    if self.view.state == "stop":
+                        # TO CHECK LOOP BREAK REASON
+                        loop_check = "Stopped"
+                        break
+                    # CHECK IF ACCOUNT REACHED SENDING LIMIT
+                    if acc.sentCounter == messages:
+                        acc.sentDate = datetime.utcnow()
                         session.commit()
+                        # TO CHECK LOOP BREAK REASON
+                        loop_check = "Account Limit"
+                        break
+                    # SENDING
+                    if self.view.username_rb.isChecked():
+                        number = None
+                        username = contact.username
                     else:
-                        # SKIP TO NEXT ACCOUNT
-                        continue
-            # TO CHECK LOOP BREAK REASON -> TO DETRMINE WHICH MESSAGE TO SHOW WHEN FINISH
-            loop_check = "Working"
+                        number = contact.number
+                        username = None
+                    if contact.name is not None:
+                        message = self.view.message_text.toPlainText().replace("{name}", contact.name)
+                    else:
+                        message = self.view.message_text.toPlainText().replace("{name}", "")
+
+                    # STOP BUTTON CHECK IF CLICKED
+                    if self.view.state == "stop":
+                        # TO CHECK LOOP BREAK REASON
+                        loop_check = "Stopped"
+                        break
+                    res = self._sending_process("anony", number, username, message, Telegram)
+                    # SENDING ERRORS CHECK
+                    if res == "not found":
+                        self._status_update(self.view.tableWidget, contact, acc, session, number, username,
+                                            "Not Found on Telegram!")
+                    elif res == "channel":
+                        self._status_update(self.view.tableWidget, contact, acc, session, number, username,
+                                            "Channel Found.. unable to send!")
+                    elif res == "connection lost":
+                        # TO CHECK LOOP BREAK REASON
+                        loop_check = "Error"
+                        break
+                    else:
+                        self._status_update(self.view.tableWidget, contact, acc, session, number, username,
+                                            "Message Sent!")
+                        # INCREASING SENT COUNER IN ACCOUNT
+                        acc.sentCounter += 1
+                        session.commit()
+
+                # CLOSE THE CURRENT ACCOUNT IF LIMIT REACHED
+                if loop_check == "Account Limit":
+                    Telegram.close()
+                    sleep(2)
+                # BREAK ACCOUNTS LOOP IF CONNECTION ERROR FOR MORE THAT 1 HOUR
+                elif loop_check == "Error":
+                    self.signals.ok_message.emit("Error", "Connection was lost for more 1 hour\nPlease check your network then try again")
+                    break
+                # BREAK ACCOUNTS LOOP IF COMPLETED
+                elif loop_check == "Sending":
+                    self.signals.ok_message.emit("Completed", "Session Completed Successfully ^_^")
+                    break
+                # BREAK ACCOUNTS LOOP IF CONTACTS LIST IS EMPTY
+                elif loop_check == "Working":
+                    self.signals.ok_message.emit("Attention",
+                                                 "Already sent the message to all contacts")
+                    break
+                # BREAK ACCOUNTS LOOP IF ALL ACCOUNTS ALREADY REACHED LIMIT
+                else:
+                    break
+
+            # SHOW THIS MESSAGE ONLY WHEN ALL ACCOUNTS REACH LIMIT
+            if loop_check is None or loop_check == "Account Limit":
+                self.signals.ok_message.emit("Limit Reached",
+                                             "All listed accountes have reached the sending limit for today\nplease add more accounts or try sending again tomorrow")
+                self.state.stop_state("anony")
+                # todo - (Future update) option for the user to make software sleep for 24 hours when all account reach limit
+            else:
+                self.state.stop_state("anony")
+        except Exception as e:
+            error_message = f"Something wrong happened\nError: \n{e.__repr__()}\nTraceback: \n{traceback.format_tb(e.__traceback__)}"
+            # error_message = f"Something wrong happened\nError: \n{e.__repr__()}\nLine: \n{e.__traceback__.tb_lineno}"
+            self.signals.ok_message.emit("Error", error_message)
+            self.state.stop_state("anony")
+
+
+    def process_familiar(self):
+        try:
+            # CHECK ON THE LAST MODE WAS WORKING TO CLOSE THE BROWSER IF SWITCHED TO ANOTHER
+            if self.last_started == "anony":
+                Telegram.close()
+            self.last_started = "familiar"
+            session = Session()
+            self.view.save_settings(session)
+            # TO CHECK REASON OF BREAKING CONTACTS LOOP
+            loop_check = None  # "Sending" | "Error" | "Account Limit" | "Stopped"
             # OPEN THE ACCOUNT BROWSER WINDOW
-            Telegram.open(acc.name)
+            Telegram.open("browserData")
             # GET CONTACTS WITH STATUS "--"
-            contacts = session.query(ContactsAnony).filter_by(status="--").all()
+            contacts = session.query(ContactsFamiliar).filter_by(status="--").all()
             # CONTACTS LOOP
             for contact in contacts:
-                # TO DETRMINE WHICH MESSAGE TO SHOW WHEN FINISH
+                # TO CHECK LOOP BREAK REASON
                 loop_check = "Sending"
                 # STOP BUTTON CHECK IF CLICKED
                 if self.view.state == "stop":
-                    # TO CHECK LOOP BREAK REASON
                     loop_check = "Stopped"
                     break
-                # CHECK IF ACCOUNT REACHED SENDING LIMIT
-                if acc.sentCounter == messages:
-                    acc.sentDate = datetime.utcnow()
-                    session.commit()
-                    # TO CHECK LOOP BREAK REASON
-                    loop_check = "Account Limit"
-                    break
+                # BREAKING THE PATTERN
+                sleep(random.randint(1, 5))
                 # SENDING
-                if self.view.username_rb.isChecked():
+                if self.view.username_rb_2.isChecked():
                     number = None
                     username = contact.username
                 else:
                     number = contact.number
                     username = None
-                message = self.view.message_text.toPlainText().replace("{name}", contact.name)
-                # STOP BUTTON CHECK IF CLICKED
-                if self.view.state == "stop":
-                    # TO CHECK LOOP BREAK REASON
-                    loop_check = "Stopped"
-                    break
-                res = self._sending_process("anony", number, username, message, Telegram)
+                message = self.view.message_text_2.toPlainText().replace("{name}", contact.name)
+                res = self._sending_process("familiar", number, username, message, Telegram)
                 # SENDING ERRORS CHECK
                 if res == "not found":
-                    self._status_update(self.view.tableWidget, contact, acc, session, number, username,
+                    self._status_update(self.view.tableWidget_2, contact, None, session, number, username,
                                         "Not Found on Telegram!")
                 elif res == "channel":
-                    self._status_update(self.view.tableWidget, contact, acc, session, number, username,
+                    self._status_update(self.view.tableWidget_2, contact, None, session, number, username,
                                         "Channel Found.. unable to send!")
                 elif res == "connection lost":
-                    # TO CHECK LOOP BREAK REASON
                     loop_check = "Error"
                     break
                 else:
-                    self._status_update(self.view.tableWidget, contact, acc, session, number, username,
+                    self._status_update(self.view.tableWidget_2, contact, None, session, number, username,
                                         "Message Sent!")
-                    # INCREASING SENT COUNER IN ACCOUNT
-                    acc.sentCounter += 1
-                    session.commit()
-
-            # CLOSE THE CURRENT ACCOUNT IF LIMIT REACHED
-            if loop_check == "Account Limit":
-                Telegram.close()
-                sleep(2)
-            # BREAK ACCOUNTS LOOP IF CONNECTION ERROR FOR MORE THAT 1 HOUR
-            elif loop_check == "Error":
-                self.signals.ok_message.emit("Error", "Connection was lost for more 1 hour\nPlease check your network then try again")
-                break
-            # BREAK ACCOUNTS LOOP IF COMPLETED
+            # SHOW THIS IF CONNECTION ERROR FOR MORE THAT 1 HOUR
+            if loop_check == "Error":
+                self.signals.ok_message.emit("Error",
+                                             "Connection was lost for more 1 hour\nPlease check your network then try again")
+            # SHOW THIS IF STOP BUTTON CLICKED
+            elif loop_check == "Stopped":
+                pass
+            # SHOW THIS IF MESSAGES LIST IS EMPTY
+            elif loop_check is None:
+                self.signals.ok_message.emit("Attention", "Already sent the message to all contacts")
+            # SHOW THIS IF FINISHED SENDING
             elif loop_check == "Sending":
                 self.signals.ok_message.emit("Completed", "Session Completed Successfully ^_^")
-                break
-            # BREAK ACCOUNTS LOOP IF CONTACTS LIST IS EMPTY
-            elif loop_check == "Working":
-                self.signals.ok_message.emit("Attention",
-                                             "Already sent the message to all contacts")
-                break
-            # BREAK ACCOUNTS LOOP IF ALL ACCOUNTS ALREADY REACHED LIMIT
-            else:
-                break
 
-        # SHOW THIS MESSAGE ONLY WHEN ALL ACCOUNTS REACH LIMIT
-        if loop_check is None or loop_check == "Account Limit":
-            self.signals.ok_message.emit("Limit Reached",
-                                         "All listed accountes have reached the sending limit for today\nplease add more accounts or try sending again tomorrow")
-            self.state.stop_state("anony")
-            # todo - (Future update) option for the user to make software sleep for 24 hours when all account reach limit
-        else:
-            self.state.stop_state("anony")
-
-
-
-    def process_familiar(self):
-        # CHECK ON THE LAST MODE WAS WORKING TO CLOSE THE BROWSER IF SWITCHED TO ANOTHER
-        if self.last_started == "anony":
-            Telegram.close()
-        self.last_started = "familiar"
-        session = Session()
-        self.view.save_settings(session)
-        # TO CHECK REASON OF BREAKING CONTACTS LOOP
-        loop_check = None  # "Sending" | "Error" | "Account Limit" | "Stopped"
-        # OPEN THE ACCOUNT BROWSER WINDOW
-        Telegram.open("browserData")
-        # GET CONTACTS WITH STATUS "--"
-        contacts = session.query(ContactsFamiliar).filter_by(status="--").all()
-        # CONTACTS LOOP
-        for contact in contacts:
-            # TO CHECK LOOP BREAK REASON
-            loop_check = "Sending"
-            # STOP BUTTON CHECK IF CLICKED
-            if self.view.state == "stop":
-                loop_check = "Stopped"
-                break
-            # BREAKING THE PATTERN
-            sleep(random.randint(1, 5))
-            # SENDING
-            if self.view.username_rb_2.isChecked():
-                number = None
-                username = contact.username
-            else:
-                number = contact.number
-                username = None
-            message = self.view.message_text_2.toPlainText().replace("{name}", contact.name)
-            res = self._sending_process("familiar", number, username, message, Telegram)
-            # SENDING ERRORS CHECK
-            if res == "not found":
-                self._status_update(self.view.tableWidget_2, contact, None, session, number, username,
-                                    "Not Found on Telegram!")
-            elif res == "channel":
-                self._status_update(self.view.tableWidget_2, contact, None, session, number, username,
-                                    "Channel Found.. unable to send!")
-            elif res == "connection lost":
-                loop_check = "Error"
-                break
-            else:
-                self._status_update(self.view.tableWidget_2, contact, None, session, number, username,
-                                    "Message Sent!")
-        # SHOW THIS IF CONNECTION ERROR FOR MORE THAT 1 HOUR
-        if loop_check == "Error":
-            self.signals.ok_message.emit("Error",
-                                         "Connection was lost for more 1 hour\nPlease check your network then try again")
-        # SHOW THIS IF STOP BUTTON CLICKED
-        elif loop_check == "Stopped":
-            pass
-        # SHOW THIS IF MESSAGES LIST IS EMPTY
-        elif loop_check is None:
-            self.signals.ok_message.emit("Attention", "Already sent the message to all contacts")
-        # SHOW THIS IF FINISHED SENDING
-        elif loop_check == "Sending":
-            self.signals.ok_message.emit("Completed", "Session Completed Successfully ^_^")
-
-        self.state.stop_state("familiar")
-
-        # TODO - not completed
-
+            self.state.stop_state("familiar")
+        except Exception as e:
+            error_message = f"Something wrong happened\nError: \n{e.__repr__()}\nTraceback: \n{traceback.format_tb(e.__traceback__)}"
+            self.signals.ok_message.emit("Error", error_message)
+            self.state.stop_state("familiar")
 
 
 if __name__ == '__main__':
