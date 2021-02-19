@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty, Channel, Chat
-
+import controller
 from controller import browserData, accountsFolder
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
@@ -213,7 +213,8 @@ class Telegram:
     def api_client_connect(cls, phone, api_id, api_hash):
         if "+" not in phone:
             phone = "+" + phone
-        cls.client = TelegramClient(phone, api_id, api_hash)
+        session_path = os.path.join(f"{controller.data_folder}", phone)
+        cls.client = TelegramClient(session_path, api_id, api_hash)
         cls.client.connect()
         if not cls.client.is_user_authorized():
             print("not authorized")

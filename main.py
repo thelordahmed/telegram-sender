@@ -23,6 +23,7 @@ from state_methods import State
 from ast import literal_eval
 import traceback
 from license_validation import License
+import traceback
 
 
 # todo - (Future update) load the contacts to the interface in another thread
@@ -114,9 +115,9 @@ class Main:
         self.state.start_state(mode)
 
     def connect_btn_func(self):
-        phone = self.view.phone_le.text()
-        api_id = int(self.view.api_id_le.text())
-        api_hash = self.view.api_hash_le.text()
+        phone = self.view.phone_le.text().strip()
+        api_id = int(self.view.api_id_le.text().strip())
+        api_hash = self.view.api_hash_le.text().strip()
         try:
             if Telegram.api_client_connect(phone, api_id, api_hash) is False:
                 self.view.widget_4.show()
@@ -126,11 +127,11 @@ class Main:
                 self.connected_action()
         except Exception as e:
             print(e)
-            self.signals.ok_message.emit("Error", "Unable to connect!")
+            self.signals.ok_message.emit("Error", f"Unable to connect! \n tracback:\n{traceback.extract_tb(e.__traceback__)}")
 
     def confirm_btn_func(self):
-        code = self.view.confirm_code_le.text()
-        phone = self.view.phone_le.text()
+        code = self.view.confirm_code_le.text().strip()
+        phone = self.view.phone_le.text().strip()
         res = Telegram.api_confirm_signin(phone, code)
         if res == "invalid code":
             self.signals.ok_message.emit("Error", "Invalid Code")
@@ -158,9 +159,9 @@ class Main:
             # SAVING USER INPUTS
             with open(os.path.join(controller.data_folder, "groups_inputs.json"), "w") as f:
                 data = {
-                    "phone": self.view.phone_le.text(),
-                    "api_id": self.view.api_id_le.text(),
-                    "api_hash": self.view.api_hash_le.text(),
+                    "phone": self.view.phone_le.text().strip(),
+                    "api_id": self.view.api_id_le.text().strip(),
+                    "api_hash": self.view.api_hash_le.text().strip(),
                     "output": self.view.output_le.text()
                 }
                 f.write(json.dumps(data))
