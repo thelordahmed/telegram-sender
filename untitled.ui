@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>782</width>
-    <height>1015</height>
+    <height>1055</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -223,7 +223,7 @@ QTabBar::tab:selected {
 }</string>
              </property>
              <property name="currentIndex">
-              <number>1</number>
+              <number>2</number>
              </property>
              <property name="iconSize">
               <size>
@@ -672,7 +672,7 @@ background:transparent;
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>493</width>
+                   <width>16777215</width>
                    <height>16777215</height>
                   </size>
                  </property>
@@ -1209,7 +1209,7 @@ background:transparent;
                    <number>5</number>
                   </property>
                   <item>
-                   <widget class="QWidget" name="" native="true">
+                   <widget class="QWidget" name="widget" native="true">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                       <horstretch>0</horstretch>
@@ -1643,7 +1643,7 @@ font-size:12px
               </widget>
              </item>
              <item>
-              <widget class="QFrame" name="">
+              <widget class="QFrame" name="frame">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                  <horstretch>0</horstretch>
@@ -1814,7 +1814,7 @@ font-size:12px
                  </widget>
                 </item>
                 <item>
-                 <widget class="QGroupBox" name="">
+                 <widget class="QGroupBox" name="groupBox">
                   <property name="title">
                    <string>Export Location</string>
                   </property>

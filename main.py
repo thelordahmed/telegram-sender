@@ -387,6 +387,11 @@ class Main:
             "connection lost" : if connection was lost
 
         """
+        # MAKING SURE THAT REOLOADING IS DONE AND NETWORK IS CONNECTED
+        try:
+            Telegram.wait_for_connection()
+        except TimeoutException:
+            return "connection lost"
         if mode == "anony":
             textFirst_rb = self.view.textFirst_rb
             paths_string = self.view.attachments_le.text()
@@ -398,38 +403,30 @@ class Main:
             paths = literal_eval(paths_string)
         else:
             paths = []
-        # CHECK CONNECTION
-        if Telegram.network_still_connected():
-            # SEARCH FOR NUMBER OR USERNAME
-            if number is not None:
-                if telegram_class.search_phone(number) is False:
-                    return "not found"
-            else:
-                res = telegram_class.search_username(username)
-                if res is False:
-                    return "not found"
-                elif res == "channel":
-                    return "channel"
-            # PREPARING THE MULTIPLE MESSAGES
-            if "{new message}" in message:
-                multi_messages = message.split("\n\n\n{new message}\n\n")
-            else:
-                multi_messages = [message]
-            # SENDING TEXT & ATTACHMENTS
-            if textFirst_rb.isChecked():
-                for msg in multi_messages:
-                    telegram_class.sending_text(msg)
-                telegram_class.sending_attachment(paths)
-            else:
-                telegram_class.sending_attachment(paths)
-                for msg in multi_messages:
-                    telegram_class.sending_text(msg)
+        # SEARCH FOR NUMBER OR USERNAME
+        if number is not None:
+            if telegram_class.search_phone(number) is False:
+                return "not found"
         else:
-            try:
-                Telegram.wait_for_connection()
-                self._sending_process(mode, number, username, message, telegram_class)
-            except TimeoutException:
-                return "connection lost"
+            res = telegram_class.search_username(username)
+            if res is False:
+                return "not found"
+            elif res == "channel":
+                return "channel"
+        # PREPARING THE MULTIPLE MESSAGES
+        if "{new message}" in message:
+            multi_messages = message.split("\n\n\n{new message}\n\n")
+        else:
+            multi_messages = [message]
+        # SENDING TEXT & ATTACHMENTS
+        if textFirst_rb.isChecked():
+            for msg in multi_messages:
+                telegram_class.sending_text(msg)
+            telegram_class.sending_attachment(paths)
+        else:
+            telegram_class.sending_attachment(paths)
+            for msg in multi_messages:
+                telegram_class.sending_text(msg)
 
     def _status_update(self, table_widget: View, contact: ContactsAnony or ContactsFamiliar, account: Account or None, session: Session, number: str, username: str, status: str):
         # UPDATING STATUS IN DB
@@ -462,7 +459,7 @@ class Main:
             self.last_started = "anony"
             session = Session()
             self.view.save_settings(session)
-            messages = self.view.messages_sb.value()
+            messages_limit = self.view.messages_sb.value()
             accounts = session.query(Account).all()
             # TO CHECK LOOP BREAK REASON
             loop_check = None  # "Working" | "Error" | "Account Limit" | "Stopped" | "Sending"
@@ -471,7 +468,7 @@ class Main:
                 if self.view.state == "stop":
                     loop_check = "Stopped"
                     break
-                if acc.sentCounter >= messages:
+                if acc.sentCounter >= messages_limit:
                     # AVOIDING A BUG: CHECK IF THIS ACCOUNT HAS A sentDate OR NOT
                     if acc.sentDate is not None:
                         if (datetime.utcnow() - acc.sentDate) > timedelta(hours=24):
@@ -479,7 +476,7 @@ class Main:
                             acc.sentCounter = 0
                             session.commit()
                         else:
-                            # SKIP TO NEXT ACCOUNT
+                            # SKIP TO NEXT ACCOUNT IF 24 HOURS NOT PASSED YET ON LAST SENT
                             continue
                 # TO CHECK LOOP BREAK REASON -> TO DETRMINE WHICH MESSAGE TO SHOW WHEN FINISH
                 loop_check = "Working"
@@ -497,7 +494,7 @@ class Main:
                         loop_check = "Stopped"
                         break
                     # CHECK IF ACCOUNT REACHED SENDING LIMIT
-                    if acc.sentCounter == messages:
+                    if acc.sentCounter >= messages_limit:
                         acc.sentDate = datetime.utcnow()
                         session.commit()
                         # TO CHECK LOOP BREAK REASON
@@ -535,8 +532,9 @@ class Main:
                     else:
                         self._status_update(self.view.tableWidget, contact, acc, session, number, username,
                                             "Message Sent!")
-                        # INCREASING SENT COUNER IN ACCOUNT
+                        # INCREASING SENT COUNER IN ACCOUNT & UPDATING SENT DATE
                         acc.sentCounter += 1
+                        acc.sentDate = datetime.utcnow()
                         session.commit()
 
                 # CLOSE THE CURRENT ACCOUNT IF LIMIT REACHED

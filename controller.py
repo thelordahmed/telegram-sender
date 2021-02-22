@@ -3,7 +3,7 @@ import platform
 
 
 
-version = "1.0.0"
+version = "1.0.1"
 copyright_text = "AhmeDSaeeD | (lordahmed on Fiverr)"
 copyright_url = "https://fiverr.com/lordahmed"
 

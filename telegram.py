@@ -106,7 +106,7 @@ class Telegram:
             cls._window.find_element_by_xpath(cls.dropdown_btn).click()
         except NoSuchElementException:
             cls._window.refresh()
-            cls.search_phone(number)
+            cls.search_phone(number)    # RECURSIVE
         # ADDING NEW CONTACT
         try:
             sleep(1)
@@ -129,6 +129,9 @@ class Telegram:
             return False
         except NoSuchElementException:
             pass
+        # BREAKING THE PATTERN
+        sleep(random.randint(1, 2))
+
 
 
     @classmethod
