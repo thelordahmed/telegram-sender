@@ -1,4 +1,3 @@
-import asyncio
 import csv
 import json
 import platform
@@ -9,7 +8,6 @@ from PySide2 import QtCore
 from openpyxl import load_workbook
 from selenium.common.exceptions import TimeoutException
 from telethon.errors import ChannelPrivateError
-import threading
 import controller
 from PySide2.QtWidgets import QApplication
 from view import View
