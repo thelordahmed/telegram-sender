@@ -290,6 +290,10 @@ class Main:
           to check on newly added data on sheet when software restarts. if it's not equal, it will
           start adding the data and check on every object
         """
+        if mode == "anony":
+            username_rb = self.view.username_rb
+        else:
+            username_rb = self.view.username_rb_2
         if ".xlsx" in path:
             wb = load_workbook(path)
             sheet = wb.active
@@ -300,7 +304,7 @@ class Main:
                 if row[0] is not None or row[1] is not None:
                     clean_data.append(row)
             for name, numOrUsername in clean_data:
-                if self.view.username_rb.isChecked():
+                if username_rb.isChecked():
                     if name is not None:
                         contact = ContactsAnony(name=name, username=numOrUsername,
                                                 status="--") if mode == "anony" else ContactsFamiliar(name=name,
@@ -312,7 +316,8 @@ class Main:
                             username=numOrUsername, status="--")
                 else:
                     if name is not None:
-                        contact = ContactsAnony(name=name, number=numOrUsername,
+                        contact = ContactsAnony(name=name,
+                                                number=numOrUsername,
                                                 status="--") if mode == "anony" else ContactsFamiliar(name=name,
                                                                                                       number=numOrUsername,
                                                                                                       status="--")
@@ -334,7 +339,7 @@ class Main:
                         name = None
                         numOrUsername = row[0]
 
-                    if self.view.username_rb.isChecked():
+                    if username_rb.isChecked():
                         if name is not None:
                             contact = ContactsAnony(name=name, username=numOrUsername,
                                                     status="--") if mode == "anony" else ContactsFamiliar(name=name,
@@ -604,7 +609,10 @@ class Main:
                 else:
                     number = contact.number
                     username = None
-                message = self.view.message_text_2.toPlainText().replace("{name}", contact.name)
+                if contact.name is not None:
+                    message = self.view.message_text_2.toPlainText().replace("{name}", contact.name)
+                else:
+                    message = self.view.message_text_2.toPlainText()
                 res = self._sending_process("familiar", number, username, message, Telegram)
                 # SENDING ERRORS CHECK
                 if res == "not found":
