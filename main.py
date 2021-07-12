@@ -22,6 +22,8 @@ from ast import literal_eval
 import traceback
 from license_validation import License
 import traceback
+# BUG FIX FOR CX_FREEZE
+import sqlalchemy.sql.default_comparator
 
 
 # todo - (Future update) load the contacts to the interface in another thread

@@ -14,6 +14,7 @@ if platform.system() == "Darwin":
     browserData = f"{data_folder}/browserData"
     accountsFolder = f"{data_folder}/Accounts"
 else:
-    data_folder = "Data"
-    browserData = f"Data\\browserData"
-    accountsFolder = f"Data\\Accounts"
+    cwd = os.getcwd()   # TO FIX BROWSER DATA BUG
+    data_folder = f"{cwd}\\Data"
+    browserData = f"{cwd}\\Data\\browserData"
+    accountsFolder = f"{cwd}\\Data\\Accounts"
